@@ -28,6 +28,15 @@ const int RENDER_DRAW_COLOR = 255;
 #define MAX_MAP_X 400
 #define MAX_MAP_Y 10
 
+struct Input
+{
+    int left_;
+    int right_;
+    int up_;
+    int down_;
+    int jump_;
+};
+
 struct Map
 {
     int start_x_;
