@@ -1,6 +1,7 @@
 #include "common_function.h"
 #include "base_object.h"
 #include "game_map.h"
+#include "player_object.h"
 
 base_object g_background;
 
@@ -94,6 +95,10 @@ int main(int argc, char* argv[])
     #pragma GCC diagnostic warning "-Wwrite-strings"
     game_map.LoadTiles(g_screen);
 
+    PlayerObject p_player;
+    p_player.LoadImage ("img//player_right.png", g_screen);
+    p_player.set_clips();
+
     bool is_quit = false;
     // Vòng lặp chính của chương trình
     while (!is_quit) {
@@ -103,6 +108,8 @@ int main(int argc, char* argv[])
             {
                 is_quit = true;
             }
+
+            p_player.HandleInputAction (g_event, g_screen);
         }
 
         // Làm mới cửa sổ
@@ -113,7 +120,7 @@ int main(int argc, char* argv[])
         g_background.Render(g_screen, NULL);
         game_map.DrawMap(g_screen);
 
-
+        p_player.Show(g_screen);
 
         // Cập nhật màn hình
         SDL_RenderPresent(g_screen);
