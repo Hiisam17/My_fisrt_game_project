@@ -10,6 +10,9 @@ void GameMap::LoadMap(char* name)
         return;
     }
 
+    game_map_.max_x_ = 0;
+    game_map_.max_y_ = 0;
+    
     for (int i = 0; i < MAX_MAP_Y; i++)
     {
         for (int j = 0; j < MAX_MAP_X; j++)
