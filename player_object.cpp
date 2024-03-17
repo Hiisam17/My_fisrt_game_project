@@ -12,6 +12,11 @@ PlayerObject::PlayerObject()
     width_frame_ = 0;
     height_frame_ = 0;
     status_ = -1;
+    input_type_.left_ = 0;
+    input_type_.right_ = 0;
+    input_type_.down_ = 0;
+    input_type_.jump_ = 0;
+    input_type_.up_ = 0;
 }
 
 PlayerObject::~PlayerObject()
@@ -123,12 +128,14 @@ void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
             {
                 status_ = MOVE_RIGHT_;
                 input_type_.right_ = 1;
+                input_type_.left_ = 0;
             }
             break;
             case SDLK_LEFT:
             {
                 status_ = MOVE_LEFT_;
                 input_type_.left_ = 1;
+                input_type_.right_ = 0;
             }
             break;
             default:
@@ -153,4 +160,9 @@ void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
             break;
         }
     }
+}
+
+void action_player (Map& map_data)
+{
+    
 }

@@ -4,6 +4,10 @@
 #include "common_function.h"
 #include "base_object.h"
 
+#define GRAVITY_SPEED 0.8
+#define MAX_FALL_SPEED 10;
+#define PLAYER_SPEED 8;
+
 class PlayerObject : public base_object
 {
     public:
@@ -20,6 +24,8 @@ class PlayerObject : public base_object
     void Show ( SDL_Renderer* des );
     void HandleInputAction (SDL_Event events, SDL_Renderer* screen);
     void set_clips();
+
+    void action_player( Map& map_data);
 
     private:
     float x_val_;
