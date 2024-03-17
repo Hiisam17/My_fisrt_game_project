@@ -5,8 +5,8 @@
 #include "base_object.h"
 
 #define GRAVITY_SPEED 0.8
-#define MAX_FALL_SPEED 10;
-#define PLAYER_SPEED 8;
+#define MAX_FALL_SPEED 10
+#define PLAYER_SPEED 8
 
 class PlayerObject : public base_object
 {
@@ -26,6 +26,8 @@ class PlayerObject : public base_object
     void set_clips();
 
     void action_player( Map& map_data);
+    float get_x_val_() {return x_val_;}
+    void check_action_player(Map& map_data);
 
     private:
     float x_val_;
@@ -41,6 +43,7 @@ class PlayerObject : public base_object
     Input input_type_;
     int frame_;
     int status_;
+    bool on_ground;
 };
 
 

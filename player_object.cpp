@@ -1,6 +1,8 @@
 #include "common_function.h"
 #include "base_object.h"
 #include "player_object.h"
+#include <algorithm>
+
 
 PlayerObject::PlayerObject()
 {
@@ -17,6 +19,7 @@ PlayerObject::PlayerObject()
     input_type_.down_ = 0;
     input_type_.jump_ = 0;
     input_type_.up_ = 0;
+    on_ground = false;
 }
 
 PlayerObject::~PlayerObject()
@@ -162,7 +165,102 @@ void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
     }
 }
 
-void action_player (Map& map_data)
+void PlayerObject::action_player ( Map& map_data )
 {
-    
+    x_val_ = 0;
+    y_val_ += 0.8;
+
+    if (y_val_ >= MAX_FALL_SPEED)
+    {
+        y_val_ = MAX_FALL_SPEED;
+    }
+
+    if (input_type_.left_ == 1)
+    {
+        x_val_ -= PLAYER_SPEED;
+    }
+    else if (input_type_.right_ == 1)
+    {
+        x_val_ += PLAYER_SPEED;
+    }
+}
+
+void PlayerObject::check_action_player (Map& map_data)
+{
+    int x1 = 0;
+    int x2 = 0;
+
+    int y1 = 0;
+    int y2 = 0;
+
+    int height_min_ = height_frame_ < TILE_SIZE ? height_frame_ : TILE_SIZE;
+
+    //Kiểm tra va chạm
+    x1 = (x_pos_ + x_val_) / TILE_SIZE;
+    x2 = (x_pos_ + x_val_ - 1) / TILE_SIZE; // -1 là sai số 
+
+    y1 = (y_pos_) / TILE_SIZE;
+    y2 = (y_pos_ + height_min_ - 1) / TILE_SIZE;
+
+    if (x1 >= 0 && x2 < MAX_MAP_X && y1 >= 0 && y2 < MAX_MAP_Y)
+    {
+        if (x_val_ > 0) // go right
+        {
+            if (map_data.tile[y1][x2] != BLANK_TILE && map_data.tile[y2][x2] != BLANK_TILE)
+            {
+                x_pos_ = x2 * TILE_SIZE;
+                x_pos_ -= width_frame_ + 1;
+                x_val_ = 0;
+            }
+        }
+        else if (x_val_ < 0)
+        {
+            if (map_data.tile[y1][x1] != BLANK_TILE && map_data.tile[y2][x1] != BLANK_TILE)
+            {
+                x_pos_ = (x1 + 1) * TILE_SIZE;
+                x_val_ = 0;
+            }
+        }
+    }
+
+    int width_min = width_frame_ < TILE_SIZE ? width_frame_ : TILE_SIZE;
+    x1 = (x_pos_) / TILE_SIZE;
+    x2 = (x_pos_ + width_min) / TILE_SIZE;
+
+    y1 = (y_pos_ + y_val_) / TILE_SIZE;
+    y2 = (y_pos_ + y_val_ + width_min - 1) / TILE_SIZE;
+
+    if (x1 >= 0 && x2 < MAX_MAP_X && y1 >= 0 && y2 < MAX_MAP_Y)
+    {
+        if (y_val_ > 0) // go down
+        {
+            if (map_data.tile[y2][x1] != BLANK_TILE && map_data.tile[y2][x2] != BLANK_TILE)
+            {
+                y_pos_ = y2 * TILE_SIZE;
+                y_pos_ -= (height_frame_ + 1);
+                y_val_ = 0;
+                on_ground = true;
+            }
+        }
+        else if (y_val_ < 0)
+        {
+            if (map_data.tile[y1][x1] != BLANK_TILE && map_data.tile[y1][x2] != BLANK_TILE)
+            {
+                y_pos_ = (y1 + 1) * TILE_SIZE;
+                y_val_ = 0;
+            }
+        }
+    }
+
+    x_pos_ += x_val_;
+    y_pos_ += y_val_;
+
+    if (x_pos_ < 0) 
+    {
+        x_pos_ = 0;
+    }
+    else if (x_pos_ + width_frame_ > map_data.max_x_)
+    {
+        x_pos_ = map_data.max_x_ - width_frame_ - 1;
+    }
 }

@@ -7,6 +7,9 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
+#include <cmath>
+#include <algorithm>
+
 
 static SDL_Window* g_window = NULL;
 static SDL_Renderer* g_screen = NULL;
@@ -24,6 +27,7 @@ const int COLOR_KEY_B = 180;
 const int RENDER_DRAW_COLOR = 255;
 
 #define TILE_SIZE 64
+#define BLANK_TILE 0
 
 #define MAX_MAP_X 400
 #define MAX_MAP_Y 10
