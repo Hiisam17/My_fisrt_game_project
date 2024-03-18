@@ -20,6 +20,8 @@ PlayerObject::PlayerObject()
     input_type_.jump_ = 0;
     input_type_.up_ = 0;
     on_ground = false;
+    map_x_ = 0;
+    map_y_ = 0;
 }
 
 PlayerObject::~PlayerObject()
@@ -111,8 +113,8 @@ void PlayerObject:: Show( SDL_Renderer* des)
         frame_ = 0;
     }
 
-    rect_.x = x_pos_;
-    rect_.y = y_pos_;
+    rect_.x = x_pos_ - map_x_;
+    rect_.y = y_pos_ - map_y_;
 
     SDL_Rect* current_clip = &frame_clip_[frame_];
 
@@ -183,7 +185,34 @@ void PlayerObject::action_player ( Map& map_data )
     {
         x_val_ += PLAYER_SPEED;
     }
+    check_action_player (map_data);
+    lock_map_to_character (map_data);
 }
+
+void PlayerObject::lock_map_to_character(Map& map_data) 
+{
+    map_data.start_x_ >= x_pos_ - (SCREEN_WIDTH / 2);
+    if (map_data.start_x_ < 0)
+    {
+        map_data.start_x_ = 0;
+    }
+    else if (map_data.start_x_ + SCREEN_WIDTH >= map_data.max_x_)
+    {
+        map_data.start_x_ = map_data.max_x_ - SCREEN_WIDTH;
+    }
+
+    map_data.start_y_ >= y_pos_ - (SCREEN_HEIGHT / 2);
+    if (map_data.start_y_ < 0)
+    {
+        map_data.start_y_ = 0;
+    }
+    else if (map_data.start_y_ + SCREEN_HEIGHT >= map_data.max_y_)
+    {
+        map_data.start_y_ = map_data.max_y_ - SCREEN_HEIGHT;
+    }    
+
+}
+
 
 void PlayerObject::check_action_player (Map& map_data)
 {

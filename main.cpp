@@ -118,13 +118,15 @@ int main(int argc, char* argv[])
 
         // Hiển thị hình ảnh nền
         g_background.Render(g_screen, NULL);
-        game_map.DrawMap(g_screen);
 
         Map map_data = game_map.get_game_map();
         
-        p_player.check_action_player(map_data);
         p_player.action_player(map_data);
+        p_player.SetMapXY(map_data.start_x_, map_data.start_y_);
         p_player.Show(g_screen);
+
+        game_map.SetMap(map_data);
+        game_map.DrawMap(g_screen);
 
         // Cập nhật màn hình
         SDL_RenderPresent(g_screen);

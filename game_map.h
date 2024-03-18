@@ -23,6 +23,7 @@ class GameMap
         void LoadTiles(SDL_Renderer* screen);
         void DrawMap(SDL_Renderer* screen);
         Map get_game_map() {return game_map_;}
+        void SetMap(Map& map_data) {game_map_ = map_data;}
     private:
         Map game_map_;
         TileMap tile_map[MAX_TILES];

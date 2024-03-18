@@ -75,12 +75,8 @@ void GameMap::DrawMap(SDL_Renderer* screen) {
     int map_x = 0;
     int map_y = 0;
 
-    map_x = game_map_.start_x_/TILE_SIZE;
-
-    x1 = (game_map_.start_x_%TILE_SIZE)*-1;
+    x1 = (game_map_.start_x_ % TILE_SIZE)*-1;
     x2 = x1 + SCREEN_WIDTH + (x1 == 0 ? 0 : TILE_SIZE);
-
-    map_y = game_map_.start_y_/TILE_SIZE;
 
     y1 = (game_map_.start_y_%TILE_SIZE)*-1;
     y2 = y1 + SCREEN_HEIGHT + (y1 == 0 ? 0 : TILE_SIZE);
@@ -90,11 +86,10 @@ void GameMap::DrawMap(SDL_Renderer* screen) {
         map_x = game_map_.start_x_/TILE_SIZE;
         for (int j = x1; j < x2; j+= TILE_SIZE)
         {
-            int val = game_map_.tile[map_y][map_x];
-            if (val > 0)
+            if (game_map_.tile[map_y][map_x] != 0)
             {
-                tile_map[val].set_rect(j, i);
-                tile_map[val].Render(screen);
+                tile_map[game_map_.tile[map_y][map_x]].set_rect(j, i);
+                tile_map[game_map_.tile[map_y][map_x]].Render(screen);
             }
             map_x++;
         }

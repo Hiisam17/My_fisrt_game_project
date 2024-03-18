@@ -28,6 +28,8 @@ class PlayerObject : public base_object
     void action_player( Map& map_data);
     float get_x_val_() {return x_val_;}
     void check_action_player(Map& map_data);
+    void SetMapXY(const int map_x, const int map_y) {map_x_ = map_x; map_y_ = map_y;}
+    void lock_map_to_character(Map& map_data);
 
     private:
     float x_val_;
@@ -44,6 +46,9 @@ class PlayerObject : public base_object
     int frame_;
     int status_;
     bool on_ground;
+
+    int map_x_;
+    int map_y_;
 };
 
 
