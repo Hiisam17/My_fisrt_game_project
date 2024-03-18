@@ -22,6 +22,7 @@ PlayerObject::PlayerObject()
     on_ground = false;
     map_x_ = 0;
     map_y_ = 0;
+    is_jump_ = false;
 }
 
 PlayerObject::~PlayerObject()
@@ -146,6 +147,10 @@ void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
             case SDLK_SPACE:
             {
                 input_type_.jump_ = 1;
+                if (is_jump_ == false)
+                {
+                    is_jump_ = true;
+                }
             }
             default:
             break;
@@ -168,6 +173,7 @@ void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
             case SDLK_SPACE:
             {
                 input_type_.jump_ = 0;
+                is_jump_ = false;
             }
             default:
             break;
@@ -196,21 +202,11 @@ void PlayerObject::action_player ( Map& map_data )
 
     if (input_type_.jump_ == 1)
     {
-        y_val_ -= 0.8;
-
-        if (input_type_.left_ == 1)
+        if (is_jump_ = true)
         {
-            x_val_ -= PLAYER_SPEED;
-        }
-        else if (input_type_.right_ == 1)
-        {
-            x_val_ += PLAYER_SPEED;
+        y_val_ -= JUMP_SPEED;
         }
 
-        if (y_val_ <= - MAX_FALL_SPEED)
-        {
-            y_val_ = - MAX_FALL_SPEED;
-        }
     }
     check_action_player (map_data);
     lock_map_to_character (map_data);
@@ -298,14 +294,13 @@ void PlayerObject::check_action_player (Map& map_data)
                 on_ground = true;
             }
         }
-        else if (y_val_ < 0)
+        /*else if (y_val_ < 0)
         {
             if (map_data.tile[y1][x1] != BLANK_TILE && map_data.tile[y1][x2] != BLANK_TILE)
             {
-                y_pos_ = (y1 + 1) * TILE_SIZE;
-                y_val_ = 0;
+                y_pos_ = (y1 + 1 + y_val_) * TILE_SIZE;
             }
-        }
+        }*/
     }
 
     x_pos_ += x_val_;

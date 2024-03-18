@@ -7,6 +7,8 @@
 #define GRAVITY_SPEED 0.8
 #define MAX_FALL_SPEED 10
 #define PLAYER_SPEED 8
+#define JUMP_SPEED 6
+#define CURRENT_HEIGHT 6
 
 class PlayerObject : public base_object
 {
@@ -49,6 +51,8 @@ class PlayerObject : public base_object
 
     int map_x_;
     int map_y_;
+
+    bool is_jump_;
 };
 
 
