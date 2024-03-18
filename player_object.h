@@ -7,7 +7,7 @@
 #define GRAVITY_SPEED 0.8
 #define MAX_FALL_SPEED 10
 #define PLAYER_SPEED 8
-#define JUMP_SPEED 6
+#define JUMP_SPEED 8
 #define CURRENT_HEIGHT 6
 
 class PlayerObject : public base_object

@@ -202,7 +202,7 @@ void PlayerObject::action_player ( Map& map_data )
 
     if (input_type_.jump_ == 1)
     {
-        if (is_jump_ = true)
+        if (is_jump_ == true)
         {
         y_val_ -= JUMP_SPEED;
         }
@@ -314,4 +314,10 @@ void PlayerObject::check_action_player (Map& map_data)
     {
         x_pos_ = map_data.max_x_ - width_frame_ - 1;
     }
+
+    if (y_val_ < JUMP_SPEED)
+    {
+        is_jump_ = true;
+    }
 }
+
