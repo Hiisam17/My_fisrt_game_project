@@ -143,6 +143,10 @@ void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
                 input_type_.right_ = 0;
             }
             break;
+            case SDLK_SPACE:
+            {
+                input_type_.jump_ = 1;
+            }
             default:
             break;
         }
@@ -161,6 +165,10 @@ void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
                 input_type_.left_ = 0;
             }
             break;
+            case SDLK_SPACE:
+            {
+                input_type_.jump_ = 0;
+            }
             default:
             break;
         }
@@ -185,13 +193,32 @@ void PlayerObject::action_player ( Map& map_data )
     {
         x_val_ += PLAYER_SPEED;
     }
+
+    if (input_type_.jump_ == 1)
+    {
+        y_val_ -= 0.8;
+
+        if (input_type_.left_ == 1)
+        {
+            x_val_ -= PLAYER_SPEED;
+        }
+        else if (input_type_.right_ == 1)
+        {
+            x_val_ += PLAYER_SPEED;
+        }
+
+        if (y_val_ <= - MAX_FALL_SPEED)
+        {
+            y_val_ = - MAX_FALL_SPEED;
+        }
+    }
     check_action_player (map_data);
     lock_map_to_character (map_data);
 }
 
 void PlayerObject::lock_map_to_character(Map& map_data) 
 {
-    map_data.start_x_ >= x_pos_ - (SCREEN_WIDTH / 2);
+    map_data.start_x_ = x_pos_ - (SCREEN_WIDTH / 2);
     if (map_data.start_x_ < 0)
     {
         map_data.start_x_ = 0;

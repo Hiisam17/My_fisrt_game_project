@@ -130,6 +130,8 @@ int main(int argc, char* argv[])
 
         // Cập nhật màn hình
         SDL_RenderPresent(g_screen);
+
+        SDL_Delay(30);
     }
     // Giải phóng tài nguyên và kết thúc chương trình
     close();
