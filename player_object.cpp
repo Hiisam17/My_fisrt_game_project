@@ -22,7 +22,6 @@ PlayerObject::PlayerObject()
     on_ground = false;
     map_x_ = 0;
     map_y_ = 0;
-    is_jump_ = false;
 }
 
 PlayerObject::~PlayerObject()
@@ -147,10 +146,6 @@ void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
             case SDLK_SPACE:
             {
                 input_type_.jump_ = 1;
-                if (is_jump_ == false)
-                {
-                    is_jump_ = true;
-                }
             }
             default:
             break;
@@ -173,7 +168,6 @@ void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
             case SDLK_SPACE:
             {
                 input_type_.jump_ = 0;
-                is_jump_ = false;
             }
             default:
             break;
@@ -202,9 +196,11 @@ void PlayerObject::action_player ( Map& map_data )
 
     if (input_type_.jump_ == 1)
     {
-        if (is_jump_ == true)
+        if (on_ground == true)
         {
-        y_val_ -= JUMP_SPEED;
+        y_val_ = - JUMP_SPEED;
+        input_type_.jump_ = 0;
+        on_ground = false;
         }
 
     }
@@ -249,7 +245,7 @@ void PlayerObject::check_action_player (Map& map_data)
 
     //Kiểm tra va chạm
     x1 = (x_pos_ + x_val_) / TILE_SIZE;
-    x2 = (x_pos_ + x_val_ - 1) / TILE_SIZE; // -1 là sai số 
+    x2 = (x_pos_ + x_val_ + width_frame_ - 1) / TILE_SIZE; // -1 là sai số 
 
     y1 = (y_pos_) / TILE_SIZE;
     y2 = (y_pos_ + height_min_ - 1) / TILE_SIZE;
@@ -280,7 +276,7 @@ void PlayerObject::check_action_player (Map& map_data)
     x2 = (x_pos_ + width_min) / TILE_SIZE;
 
     y1 = (y_pos_ + y_val_) / TILE_SIZE;
-    y2 = (y_pos_ + y_val_ + width_min - 1) / TILE_SIZE;
+    y2 = (y_pos_ + y_val_ + height_frame_ - 1) / TILE_SIZE;
 
     if (x1 >= 0 && x2 < MAX_MAP_X && y1 >= 0 && y2 < MAX_MAP_Y)
     {
@@ -294,13 +290,15 @@ void PlayerObject::check_action_player (Map& map_data)
                 on_ground = true;
             }
         }
-        /*else if (y_val_ < 0)
+        else if (y_val_ < 0)
         {
             if (map_data.tile[y1][x1] != BLANK_TILE && map_data.tile[y1][x2] != BLANK_TILE)
             {
                 y_pos_ = (y1 + 1 + y_val_) * TILE_SIZE;
+                y_val_ = 0;
+                on_ground = false;
             }
-        }*/
+        }
     }
 
     x_pos_ += x_val_;
@@ -313,11 +311,6 @@ void PlayerObject::check_action_player (Map& map_data)
     else if (x_pos_ + width_frame_ > map_data.max_x_)
     {
         x_pos_ = map_data.max_x_ - width_frame_ - 1;
-    }
-
-    if (y_val_ < JUMP_SPEED)
-    {
-        is_jump_ = true;
     }
 }
 
