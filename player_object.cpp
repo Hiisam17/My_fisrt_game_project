@@ -273,7 +273,7 @@ void PlayerObject::check_action_player (Map& map_data)
 
     int width_min = width_frame_ < TILE_SIZE ? width_frame_ : TILE_SIZE;
     x1 = (x_pos_) / TILE_SIZE;
-    x2 = (x_pos_ + width_min) / TILE_SIZE;
+    x2 = (x_pos_ + width_min - 6) / TILE_SIZE;
 
     y1 = (y_pos_ + y_val_) / TILE_SIZE;
     y2 = (y_pos_ + y_val_ + height_frame_ - 1) / TILE_SIZE;
@@ -295,6 +295,7 @@ void PlayerObject::check_action_player (Map& map_data)
             if (map_data.tile[y1][x1] != BLANK_TILE || map_data.tile[y1][x2] != BLANK_TILE)
             {
                 y_pos_ = (y1 + 1 + y_val_) * TILE_SIZE;
+                y_pos_ -= (height_frame_ + 1);
                 y_val_ = 0;
                 on_ground = false;
             }

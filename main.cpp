@@ -128,6 +128,11 @@ int main(int argc, char* argv[])
         game_map.SetMap(map_data);
         game_map.DrawMap(g_screen);
 
+        if (p_player.is_game_over(map_data) == true)
+        {
+            break;
+        }
+
         // Cập nhật màn hình
         SDL_RenderPresent(g_screen);
 

@@ -6,7 +6,7 @@
 
 #define GRAVITY_SPEED 0.8
 #define MAX_FALL_SPEED 10
-#define PLAYER_SPEED 6
+#define PLAYER_SPEED 20
 #define JUMP_SPEED 20
 #define CURRENT_HEIGHT 6
 
@@ -32,6 +32,8 @@ class PlayerObject : public base_object
     void check_action_player(Map& map_data);
     void SetMapXY(const int map_x, const int map_y) {map_x_ = map_x; map_y_ = map_y;}
     void lock_map_to_character(Map& map_data);
+
+    bool is_game_over(Map& map_data);
 
     private:
     float x_val_;
