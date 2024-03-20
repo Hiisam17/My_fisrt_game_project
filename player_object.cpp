@@ -282,7 +282,7 @@ void PlayerObject::check_action_player (Map& map_data)
     {
         if (y_val_ > 0) // go down
         {
-            if (map_data.tile[y2][x1] != BLANK_TILE && map_data.tile[y2][x2] != BLANK_TILE)
+            if (map_data.tile[y2][x1] != BLANK_TILE || map_data.tile[y2][x2] != BLANK_TILE)
             {
                 y_pos_ = y2 * TILE_SIZE;
                 y_pos_ -= (height_frame_ + 1);
@@ -292,7 +292,7 @@ void PlayerObject::check_action_player (Map& map_data)
         }
         else if (y_val_ < 0)
         {
-            if (map_data.tile[y1][x1] != BLANK_TILE && map_data.tile[y1][x2] != BLANK_TILE)
+            if (map_data.tile[y1][x1] != BLANK_TILE || map_data.tile[y1][x2] != BLANK_TILE)
             {
                 y_pos_ = (y1 + 1 + y_val_) * TILE_SIZE;
                 y_val_ = 0;
