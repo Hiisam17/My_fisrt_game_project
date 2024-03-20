@@ -9,6 +9,7 @@
 #define PLAYER_SPEED 20
 #define JUMP_SPEED 20
 #define CURRENT_HEIGHT 6
+#define GOAL_POINT 5
 
 class PlayerObject : public base_object
 {

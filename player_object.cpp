@@ -178,7 +178,7 @@ void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
 void PlayerObject::action_player ( Map& map_data )
 {
     x_val_ = 0;
-    y_val_ += 0.8;
+    y_val_ += GRAVITY_SPEED;
 
     if (y_val_ >= MAX_FALL_SPEED)
     {
@@ -245,7 +245,7 @@ void PlayerObject::check_action_player (Map& map_data)
 
     //Kiểm tra va chạm
     x1 = (x_pos_ + x_val_) / TILE_SIZE;
-    x2 = (x_pos_ + x_val_ + width_frame_ - 1) / TILE_SIZE; // -1 là sai số 
+    x2 = (x_pos_ + x_val_ + width_frame_ - 10) / TILE_SIZE; // -1 là sai số 
 
     y1 = (y_pos_) / TILE_SIZE;
     y2 = (y_pos_ + height_min_ - 1) / TILE_SIZE;
@@ -254,7 +254,7 @@ void PlayerObject::check_action_player (Map& map_data)
     {
         if (x_val_ > 0) // go right
         {
-            if (map_data.tile[y1][x2] != BLANK_TILE && map_data.tile[y2][x2] != BLANK_TILE)
+            if (map_data.tile[y1][x2] != BLANK_TILE || map_data.tile[y2][x2] != BLANK_TILE)
             {
                 x_pos_ = x2 * TILE_SIZE;
                 x_pos_ -= width_frame_ + 1;
@@ -263,7 +263,7 @@ void PlayerObject::check_action_player (Map& map_data)
         }
         else if (x_val_ < 0)
         {
-            if (map_data.tile[y1][x1] != BLANK_TILE && map_data.tile[y2][x1] != BLANK_TILE)
+            if (map_data.tile[y1][x1] != BLANK_TILE || map_data.tile[y2][x1] != BLANK_TILE)
             {
                 x_pos_ = (x1 + 1) * TILE_SIZE;
                 x_val_ = 0;
@@ -273,7 +273,7 @@ void PlayerObject::check_action_player (Map& map_data)
 
     int width_min = width_frame_ < TILE_SIZE ? width_frame_ : TILE_SIZE;
     x1 = (x_pos_) / TILE_SIZE;
-    x2 = (x_pos_ + width_min - 6) / TILE_SIZE;
+    x2 = (x_pos_ + width_min - 10) / TILE_SIZE;
 
     y1 = (y_pos_ + y_val_) / TILE_SIZE;
     y2 = (y_pos_ + y_val_ + height_frame_ - 1) / TILE_SIZE;
@@ -294,13 +294,14 @@ void PlayerObject::check_action_player (Map& map_data)
         {
             if (map_data.tile[y1][x1] != BLANK_TILE || map_data.tile[y1][x2] != BLANK_TILE)
             {
-                y_pos_ = (y1 + 1 + y_val_) * TILE_SIZE;
-                y_pos_ -= (height_frame_ + 1);
+                y_pos_ = y1 * TILE_SIZE;
+                y_pos_ += (height_frame_ + 2);
                 y_val_ = 0;
                 on_ground = false;
             }
         }
     }
+
 
     x_pos_ += x_val_;
     y_pos_ += y_val_;

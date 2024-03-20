@@ -25,5 +25,12 @@ bool PlayerObject::is_game_over(Map& map_data)
     {
         ret = true;
     }
+    else if (map_data.tile[y2][x1] == GOAL_POINT || 
+             map_data.tile[y2][x2] == GOAL_POINT ||
+             map_data.tile[y1][x1] == GOAL_POINT ||
+             map_data.tile[y1][x2] == GOAL_POINT)
+    {
+        ret = true;
+    }
     return ret;
 }
