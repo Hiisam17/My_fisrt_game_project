@@ -302,6 +302,19 @@ void PlayerObject::check_action_player (Map& map_data)
         }
     }
 
+    if (map_data.tile[y1][x2] == MONEY_COIN || map_data.tile[y2][x2] == MONEY_COIN ||
+        map_data.tile[y2][x1] == MONEY_COIN || map_data.tile[y1][x2] == MONEY_COIN ||
+        map_data.tile[y1][x2 + 1] == MONEY_COIN || map_data.tile[y2][x2 + 1] == MONEY_COIN ||
+        map_data.tile[y1][x1 - 1] == MONEY_COIN || map_data.tile[y2][x1 - 1] == MONEY_COIN)
+    {
+        map_data.tile[y1][x2] = 0;
+        //map_data.tile[y2][x2] = 0;
+        map_data.tile[y1][x1] = 0;
+        //map_data.tile[y2][x1] = 0;
+        map_data.tile[y1][x2 + 1] = 0;
+        map_data.tile[y1][x1 - 1] = 0;
+    }
+
 
     x_pos_ += x_val_;
     y_pos_ += y_val_;

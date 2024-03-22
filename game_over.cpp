@@ -34,3 +34,8 @@ bool PlayerObject::is_game_over(Map& map_data)
     }
     return ret;
 }
+
+void render_screen_game_over()
+{
+    
+}
