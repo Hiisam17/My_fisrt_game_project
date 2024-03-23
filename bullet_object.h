@@ -25,11 +25,14 @@ public:
     bool get_is_move() {return is_move_;}
 
     void bullet_handle_move(const int& x_limit_screen, const int& y_limit_screen);
+
+    void set_bullet_dir (const unsigned int& BulletDir) {bullet_dir = BulletDir;}
+    unsigned int get_bullet_dir() {return bullet_dir;}
 private:
     int x_val_;
     int y_val_;
     bool is_move_;
-    int bullet_dir;
+    unsigned int bullet_dir;
 };
 
 #endif

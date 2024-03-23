@@ -148,6 +148,29 @@ void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
             {
                 input_type_.jump_ = 1;
             }
+            case SDLK_z:
+            {
+                bullet_object* p_bullet_ = new bullet_object();
+                if (p_bullet_ != nullptr) {
+                    p_bullet_->LoadImage("img//bullet_object.png", screen);
+                    if (status_ == MOVE_LEFT_)
+                    {
+                        p_bullet_ -> set_bullet_dir(bullet_object::LEFT_DIR);
+                        p_bullet_->set_rect(this->(int)x_pos_, (int)y_pos_ + 0.4 * height_frame_);
+                    }
+                    else if (status_ == MOVE_RIGHT_)
+                    {
+                        p_bullet_ -> set_bullet_dir(bullet_object::RIGHT_DIR);
+                        p_bullet_->set_rect(this->rect_.x + width_frame_ - 10, rect_.y + 0.4 * height_frame_);
+                    }
+                    p_bullet_->set_x_val(20);
+                    p_bullet_->set_is_move(true);
+
+                    p_bullet_list_.push_back(p_bullet_);
+                } else {
+                // Xử lý trường hợp không thể cấp phát bộ nhớ cho p_bullet_
+                }
+            }
             default:
             break;
         }
@@ -172,6 +195,30 @@ void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
             }
             default:
             break;
+        }
+    }
+}
+
+void PlayerObject::HandleBullet (SDL_Renderer* des)
+{
+    for (int i = 0; i < p_bullet_list_.size(); i++)
+    {
+        bullet_object* p_bullet_ = p_bullet_list_.at(i);
+        if (p_bullet_ != NULL)
+        {
+            if (p_bullet_ -> get_is_move() == true)
+            {
+                p_bullet_ -> bullet_handle_move (SCREEN_WIDTH, SCREEN_HEIGHT);
+                p_bullet_ -> Render(des);
+            }
+            else{
+                p_bullet_list_.erase(p_bullet_list_.begin() + i);
+                if (p_bullet_ != NULL)
+                {
+                    delete p_bullet_;
+                    p_bullet_ = NULL;
+                }
+            }
         }
     }
 }

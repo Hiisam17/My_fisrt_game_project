@@ -45,6 +45,8 @@ class PlayerObject : public base_object
     }
     std::vector<bullet_object*> get_bullet_list() const {return p_bullet_list_;}
 
+    void HandleBullet (SDL_Renderer* des);
+
     private:
     std::vector<bullet_object*> p_bullet_list_;
 
