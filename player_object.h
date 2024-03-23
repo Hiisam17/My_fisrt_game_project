@@ -2,7 +2,9 @@
 #define PLAYER_OBJECT_H
 
 #include "common_function.h"
+#include <vector>
 #include "base_object.h"
+#include "bullet_object.h"
 
 #define GRAVITY_SPEED 0.8
 #define MAX_FALL_SPEED 10
@@ -37,7 +39,15 @@ class PlayerObject : public base_object
 
     bool is_game_over(Map& map_data);
 
+    void set_bullet_list(std::vector<bullet_object*> bullet_list)
+    {
+        p_bullet_list_ = bullet_list;
+    }
+    std::vector<bullet_object*> get_bullet_list() const {return p_bullet_list_;}
+
     private:
+    std::vector<bullet_object*> p_bullet_list_;
+
     float x_val_;
     float y_val_;
 

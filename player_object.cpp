@@ -2,6 +2,7 @@
 #include "base_object.h"
 #include "player_object.h"
 #include <algorithm>
+#include "bullet_object.h"
 
 
 PlayerObject::PlayerObject()
