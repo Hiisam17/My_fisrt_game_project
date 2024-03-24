@@ -93,21 +93,45 @@ void PlayerObject:: Show( SDL_Renderer* des)
 {
     if (status_ == MOVE_LEFT_)
     {
-        LoadImage( "img//player_left.png", des);
+        LoadImage( "img//run_left.jpg", des);
     }
-    else
+    else if (status_ == MOVE_RIGHT_)
     {
-        LoadImage ( "img//player_right.png", des);
+        LoadImage ( "img//run_right.jpg", des);
+    }
+    else if (status_ == 0)
+    {
+        LoadImage ("img//stand_right.jpg", des);
     }
 
-    if (input_type_.left_ == 1 || input_type_.right_ == 1)
+    /*if (input_type_.left_ == 1 || input_type_.right_ == 1)
     {
         frame_++;
-    }
-    else
+    }*/
+    frame_++;
+
+    if (frame_ >= 8)
     {
         frame_ = 0;
     }
+
+    rect_.x = x_pos_ - map_x_;
+    rect_.y = y_pos_ - map_y_;
+
+    SDL_Rect* current_clip = &frame_clip_[frame_];
+
+    SDL_Rect renderQuad = {rect_.x, rect_.y, width_frame_, height_frame_};
+
+    SDL_RenderCopy (des, p_object_, current_clip, &renderQuad);
+}
+
+void PlayerObject::ShowPlayerStand (SDL_Renderer* des)
+{
+    if (status_ == 0)
+    {
+        LoadImage ("img//stand_right.jpg", des);
+    }
+    frame_++;
 
     if (frame_ >= 8)
     {
@@ -148,33 +172,11 @@ void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
             {
                 input_type_.jump_ = 1;
             }
-            case SDLK_z:
-            {
-                bullet_object* p_bullet_ = new bullet_object();
-                if (p_bullet_ != nullptr) {
-                    p_bullet_->LoadImage("img//bullet_object.png", screen);
-                    if (status_ == MOVE_LEFT_)
-                    {
-                        p_bullet_ -> set_bullet_dir(bullet_object::LEFT_DIR);
-                        p_bullet_->set_rect(this->(int)x_pos_, (int)y_pos_ + 0.4 * height_frame_);
-                    }
-                    else if (status_ == MOVE_RIGHT_)
-                    {
-                        p_bullet_ -> set_bullet_dir(bullet_object::RIGHT_DIR);
-                        p_bullet_->set_rect(this->rect_.x + width_frame_ - 10, rect_.y + 0.4 * height_frame_);
-                    }
-                    p_bullet_->set_x_val(20);
-                    p_bullet_->set_is_move(true);
-
-                    p_bullet_list_.push_back(p_bullet_);
-                } else {
-                // Xử lý trường hợp không thể cấp phát bộ nhớ cho p_bullet_
-                }
-            }
             default:
             break;
         }
     }
+
     else if (events.type == SDL_KEYUP)
     {
         switch (events.key.keysym.sym)
@@ -182,11 +184,13 @@ void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
             case SDLK_RIGHT:
             {
                 input_type_.right_ = 0;
+                status_ = 0;
             }
             break;
             case SDLK_LEFT:
             {
                 input_type_.left_ = 0;
+                status_ = 0;
             }
             break;
             case SDLK_SPACE:

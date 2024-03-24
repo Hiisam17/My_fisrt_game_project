@@ -28,6 +28,7 @@ class PlayerObject : public base_object
 
     bool LoadImage ( std::string path, SDL_Renderer* screen);
     void Show ( SDL_Renderer* des );
+    void ShowPlayerStand (SDL_Renderer* des);
     void HandleInputAction (SDL_Event events, SDL_Renderer* screen);
     void set_clips();
 
