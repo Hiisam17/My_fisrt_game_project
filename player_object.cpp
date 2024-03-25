@@ -2,7 +2,6 @@
 #include "base_object.h"
 #include "player_object.h"
 #include <algorithm>
-#include "bullet_object.h"
 
 
 PlayerObject::PlayerObject()
@@ -99,16 +98,29 @@ void PlayerObject:: Show( SDL_Renderer* des)
     {
         LoadImage ( "img//run_right.jpg", des);
     }
-    else if (status_ == 0)
+    /*else if (status_ == 0)
     {
         LoadImage ("img//stand_right.jpg", des);
-    }
+        LoadImage ("img//stand_left.jpg", des);
+    }*/
 
-    /*if (input_type_.left_ == 1 || input_type_.right_ == 1)
+    if (input_type_.left_ == 1 || input_type_.right_ == 1 )
     {
         frame_++;
-    }*/
-    frame_++;
+    }
+    else
+    {
+        if (status_ == MOVE_RIGHT_) 
+        {
+            LoadImage ("img//stand_right.jpg", des);
+            frame_++;
+        }
+        else if (status_ == MOVE_LEFT_)
+        {
+            LoadImage ("img//stand_left.jpg", des);
+            frame_++;
+        }
+    }
 
     if (frame_ >= 8)
     {
@@ -184,13 +196,13 @@ void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
             case SDLK_RIGHT:
             {
                 input_type_.right_ = 0;
-                status_ = 0;
+                //status_ = 0;
             }
             break;
             case SDLK_LEFT:
             {
                 input_type_.left_ = 0;
-                status_ = 0;
+                //status_ = 0;
             }
             break;
             case SDLK_SPACE:
@@ -203,29 +215,7 @@ void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
     }
 }
 
-void PlayerObject::HandleBullet (SDL_Renderer* des)
-{
-    for (int i = 0; i < p_bullet_list_.size(); i++)
-    {
-        bullet_object* p_bullet_ = p_bullet_list_.at(i);
-        if (p_bullet_ != NULL)
-        {
-            if (p_bullet_ -> get_is_move() == true)
-            {
-                p_bullet_ -> bullet_handle_move (SCREEN_WIDTH, SCREEN_HEIGHT);
-                p_bullet_ -> Render(des);
-            }
-            else{
-                p_bullet_list_.erase(p_bullet_list_.begin() + i);
-                if (p_bullet_ != NULL)
-                {
-                    delete p_bullet_;
-                    p_bullet_ = NULL;
-                }
-            }
-        }
-    }
-}
+
 
 void PlayerObject::action_player ( Map& map_data )
 {
