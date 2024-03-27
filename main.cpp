@@ -54,7 +54,7 @@ bool InitData()
 bool LoadBackground()
 {
     // Tải hình ảnh nền từ file và hiển thị lên màn hình
-    bool ret = g_background.LoadImage("img//background.png", g_screen);
+    bool ret = g_background.LoadImage("img//background.png", g_screen, false);
     if (ret == false) 
     {
         return false;
@@ -96,8 +96,7 @@ int main(int argc, char* argv[])
     game_map.LoadTiles(g_screen);
 
     PlayerObject p_player;
-    p_player.LoadImage ("img//stand_left.jpg", g_screen);
-    p_player.LoadImage ("img//stand_right.jpg", g_screen);
+    p_player.LoadImage("img//stand_right.jpg", g_screen);
     p_player.set_clips();
 
     bool is_quit = false;

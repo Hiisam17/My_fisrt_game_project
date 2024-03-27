@@ -25,8 +25,8 @@ class PlayerObject : public base_object
         MOVE_LEFT_ = 1,
     };
 
-    bool LoadImage ( std::string path, SDL_Renderer* screen);
-    void Show ( SDL_Renderer* des );
+    bool LoadImage ( std::string path, SDL_Renderer* screen, bool flip_horizontal = false);
+    void Show ( SDL_Renderer* des, SDL_RendererFlip flip = SDL_FLIP_NONE);
     void ShowPlayerStand (SDL_Renderer* des);
     void HandleInputAction (SDL_Event events, SDL_Renderer* screen);
     void set_clips();

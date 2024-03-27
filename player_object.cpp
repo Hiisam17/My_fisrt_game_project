@@ -29,9 +29,9 @@ PlayerObject::~PlayerObject()
 
 }
 
-bool PlayerObject::LoadImage (std::string path, SDL_Renderer* screen)
+bool PlayerObject::LoadImage (std::string path, SDL_Renderer* screen, bool flip_horizontal)
 {
-    bool ret = base_object::LoadImage (path, screen);
+    bool ret = base_object::LoadImage (path, screen, flip_horizontal);
 
     if (ret == true)
     {
@@ -88,15 +88,15 @@ void PlayerObject::set_clips()
     }
 }
 
-void PlayerObject:: Show( SDL_Renderer* des)
+void PlayerObject:: Show( SDL_Renderer* des, SDL_RendererFlip flip)
 {
     if (status_ == MOVE_LEFT_)
     {
-        LoadImage( "img//run_left.jpg", des);
+        LoadImage( "img//run_left.jpg", des, false);
     }
     else if (status_ == MOVE_RIGHT_)
     {
-        LoadImage ( "img//run_right.jpg", des);
+        LoadImage ( "img//run_right.jpg", des, false);
     }
     /*else if (status_ == 0)
     {
@@ -112,12 +112,13 @@ void PlayerObject:: Show( SDL_Renderer* des)
     {
         if (status_ == MOVE_RIGHT_) 
         {
-            LoadImage ("img//stand_right.jpg", des);
+            LoadImage ("img//stand_right.jpg", des, false);
             frame_++;
         }
         else if (status_ == MOVE_LEFT_)
         {
-            LoadImage ("img//stand_left.jpg", des);
+            LoadImage ("img//stand_right.jpg", des, true);
+            flip = SDL_FLIP_HORIZONTAL;
             frame_++;
         }
     }
@@ -134,7 +135,7 @@ void PlayerObject:: Show( SDL_Renderer* des)
 
     SDL_Rect renderQuad = {rect_.x, rect_.y, width_frame_, height_frame_};
 
-    SDL_RenderCopy (des, p_object_, current_clip, &renderQuad);
+    SDL_RenderCopyEx (des, p_object_, current_clip, &renderQuad, 0, NULL, flip);
 }
 
 void PlayerObject::ShowPlayerStand (SDL_Renderer* des)

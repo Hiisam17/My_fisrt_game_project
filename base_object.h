@@ -18,7 +18,7 @@ public:
     SDL_Texture* GetObject() { return p_object_; }
 
     // Tải hình ảnh từ đường dẫn path và render lên màn hình screen
-    virtual bool LoadImage(std::string path, SDL_Renderer* screen);
+    virtual bool LoadImage(std::string path, SDL_Renderer* screen, bool flip_horizontal = false);
     
     // Render đối tượng lên renderer des, với clip là phần cần cắt ra (nếu có)
     void Render(SDL_Renderer* des, const SDL_Rect* clip = NULL);

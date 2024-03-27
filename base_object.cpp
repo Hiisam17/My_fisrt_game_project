@@ -19,7 +19,7 @@ base_object::~base_object()
 }
 
 // Hàm tải hình ảnh từ đường dẫn path và render lên màn hình
-bool base_object::LoadImage(std::string path, SDL_Renderer* screen)
+bool base_object::LoadImage(std::string path, SDL_Renderer* screen, bool flip_horizontal /* false */)
 {
     // Khai báo con trỏ mới cho texture và surface
     SDL_Texture* new_texture = NULL;
