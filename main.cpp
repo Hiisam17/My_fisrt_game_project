@@ -96,7 +96,7 @@ int main(int argc, char* argv[])
     game_map.LoadTiles(g_screen);
 
     PlayerObject p_player;
-    p_player.LoadImage("img//stand_right.jpg", g_screen);
+    p_player.LoadImage("img//stand_right.jpg", g_screen, false);
     p_player.set_clips();
 
     bool is_quit = false;
@@ -123,9 +123,19 @@ int main(int argc, char* argv[])
 
         p_player.action_player(map_data);
         p_player.SetMapXY(map_data.start_x_, map_data.start_y_);
-        //p_player.ShowPlayerStand(g_screen);
-        p_player.Show(g_screen);
 
+        int player_status = p_player.get_status();
+        if (player_status == 3)
+        {
+            p_player.Show_Attack(g_screen);
+            p_player.set_clips();
+        }
+        else
+        {
+            p_player.Show(g_screen);
+            p_player.set_clips();
+        }
+        
         game_map.SetMap(map_data);
         game_map.DrawMap(g_screen);
 

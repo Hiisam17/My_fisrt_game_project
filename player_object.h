@@ -23,11 +23,13 @@ class PlayerObject : public base_object
     {
         MOVE_RIGHT_ = 0,
         MOVE_LEFT_ = 1,
+        JUMP_UP_ = 2,
+        ATTACK_ = 3,
     };
 
     bool LoadImage ( std::string path, SDL_Renderer* screen, bool flip_horizontal = false);
     void Show ( SDL_Renderer* des, SDL_RendererFlip flip = SDL_FLIP_NONE);
-    void ShowPlayerStand (SDL_Renderer* des);
+    void Show_Attack ( SDL_Renderer* des, SDL_RendererFlip flip = SDL_FLIP_NONE);
     void HandleInputAction (SDL_Event events, SDL_Renderer* screen);
     void set_clips();
 
@@ -38,6 +40,8 @@ class PlayerObject : public base_object
     void lock_map_to_character(Map& map_data);
 
     bool is_game_over(Map& map_data);
+
+    int get_status() {return status_;}
 
     private:
 

@@ -16,9 +16,8 @@ PlayerObject::PlayerObject()
     status_ = -1;
     input_type_.left_ = 0;
     input_type_.right_ = 0;
-    input_type_.down_ = 0;
+    input_type_.attack_ = 0;
     input_type_.jump_ = 0;
-    input_type_.up_ = 0;
     on_ground = false;
     map_x_ = 0;
     map_y_ = 0;
@@ -138,13 +137,13 @@ void PlayerObject:: Show( SDL_Renderer* des, SDL_RendererFlip flip)
     SDL_RenderCopyEx (des, p_object_, current_clip, &renderQuad, 0, NULL, flip);
 }
 
-void PlayerObject::ShowPlayerStand (SDL_Renderer* des)
+void PlayerObject::Show_Attack (SDL_Renderer* des, SDL_RendererFlip flip)
 {
-    if (status_ == 0)
+    if (status_ == ATTACK_)
     {
-        LoadImage ("img//stand_right.jpg", des);
+        LoadImage ("img//attack_right.png", des, false);
+        frame_++;
     }
-    frame_++;
 
     if (frame_ >= 8)
     {
@@ -158,7 +157,7 @@ void PlayerObject::ShowPlayerStand (SDL_Renderer* des)
 
     SDL_Rect renderQuad = {rect_.x, rect_.y, width_frame_, height_frame_};
 
-    SDL_RenderCopy (des, p_object_, current_clip, &renderQuad);
+    SDL_RenderCopyEx (des, p_object_, current_clip, &renderQuad, 0, NULL, flip);
 }
 
 void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
@@ -184,6 +183,13 @@ void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
             case SDLK_SPACE:
             {
                 input_type_.jump_ = 1;
+                input_type_.attack_ = 0;
+                status_ = JUMP_UP_;
+            }
+            case SDLK_z:
+            {
+                input_type_.attack_ = 1;
+                status_ = ATTACK_;
             }
             default:
             break;
@@ -209,6 +215,11 @@ void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
             case SDLK_SPACE:
             {
                 input_type_.jump_ = 0;
+                input_type_.attack_ = 0;
+            }
+            case SDLK_z:
+            {
+                input_type_.attack_ = 0;
             }
             default:
             break;
