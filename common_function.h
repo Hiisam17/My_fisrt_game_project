@@ -38,6 +38,8 @@ struct Input
     int right_;
     int attack_;
     int jump_;
+    int stand_left_;
+    int stand_right_;
 };
 
 struct Map

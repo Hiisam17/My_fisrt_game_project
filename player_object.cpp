@@ -18,6 +18,8 @@ PlayerObject::PlayerObject()
     input_type_.right_ = 0;
     input_type_.attack_ = 0;
     input_type_.jump_ = 0;
+    input_type_.stand_left_ = 0;
+    input_type_.stand_right_ = 0;
     on_ground = false;
     map_x_ = 0;
     map_y_ = 0;
@@ -35,6 +37,19 @@ bool PlayerObject::LoadImage (std::string path, SDL_Renderer* screen, bool flip_
     if (ret == true)
     {
         width_frame_ = rect_.w / 8;
+        height_frame_ = rect_.h;
+    }
+
+    return ret;
+}
+
+bool PlayerObject::LoadImage_Attack (std::string path, SDL_Renderer* screen, bool flip_horizontal)
+{
+    bool ret = base_object::LoadImage (path, screen, flip_horizontal);
+
+    if (ret == true)
+    {
+        width_frame_ = rect_.w / 8 + 1;
         height_frame_ = rect_.h;
     }
 
@@ -89,7 +104,7 @@ void PlayerObject::set_clips()
 
 void PlayerObject:: Show( SDL_Renderer* des, SDL_RendererFlip flip)
 {
-    if (status_ == MOVE_LEFT_)
+    if (status_ == MOVE_LEFT_ )
     {
         LoadImage( "img//run_left.jpg", des, false);
     }
@@ -103,11 +118,11 @@ void PlayerObject:: Show( SDL_Renderer* des, SDL_RendererFlip flip)
         LoadImage ("img//stand_left.jpg", des);
     }*/
 
-    if (input_type_.left_ == 1 || input_type_.right_ == 1 )
+    if (input_type_.left_ == 1 || input_type_.right_ == 1)
     {
         frame_++;
     }
-    else
+    else if (input_type_.attack_ != 1)
     {
         if (status_ == MOVE_RIGHT_) 
         {
@@ -139,10 +154,21 @@ void PlayerObject:: Show( SDL_Renderer* des, SDL_RendererFlip flip)
 
 void PlayerObject::Show_Attack (SDL_Renderer* des, SDL_RendererFlip flip)
 {
-    if (status_ == ATTACK_)
+    if (input_type_.attack_ == 1)
     {
-        LoadImage ("img//attack_right.png", des, false);
-        frame_++;
+        if (input_type_.stand_right_ == 1) 
+        {
+            LoadImage_Attack ("img//attack_right.png", des, false);
+            frame_++;
+        }
+        else if (input_type_.stand_left_ == 1)
+        {
+            LoadImage_Attack ("img//attack_right.png", des, true);
+            flip = SDL_FLIP_HORIZONTAL;
+            frame_++;
+        }
+        /*LoadImage_Attack ("img//attack_right.png", des, true);
+        frame_++;*/
     }
 
     if (frame_ >= 8)
@@ -171,6 +197,8 @@ void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
                 status_ = MOVE_RIGHT_;
                 input_type_.right_ = 1;
                 input_type_.left_ = 0;
+                input_type_.stand_right_ = 1;
+                input_type_.stand_left_ = 0;
             }
             break;
             case SDLK_LEFT:
@@ -178,6 +206,8 @@ void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
                 status_ = MOVE_LEFT_;
                 input_type_.left_ = 1;
                 input_type_.right_ = 0;
+                input_type_.stand_left_ = 1;
+                input_type_.stand_right_ = 0;
             }
             break;
             case SDLK_SPACE:
@@ -186,11 +216,16 @@ void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
                 input_type_.attack_ = 0;
                 status_ = JUMP_UP_;
             }
+            break;
             case SDLK_z:
             {
                 input_type_.attack_ = 1;
-                status_ = ATTACK_;
+                if (status_ != ATTACK_)
+                {
+                    status_ = ATTACK_;
+                }
             }
+            break;
             default:
             break;
         }
@@ -215,11 +250,15 @@ void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
             case SDLK_SPACE:
             {
                 input_type_.jump_ = 0;
-                input_type_.attack_ = 0;
+            
             }
             case SDLK_z:
             {
                 input_type_.attack_ = 0;
+                if (status_ == ATTACK_)
+                {
+                    status_ = MOVE_RIGHT_;
+                }
             }
             default:
             break;

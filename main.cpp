@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
 
     PlayerObject p_player;
     p_player.LoadImage("img//stand_right.jpg", g_screen, false);
-    p_player.set_clips();
+    //p_player.set_clips();
 
     bool is_quit = false;
     // Vòng lặp chính của chương trình
@@ -130,8 +130,9 @@ int main(int argc, char* argv[])
             p_player.Show_Attack(g_screen);
             p_player.set_clips();
         }
-        else
+        if (player_status != 3)
         {
+
             p_player.Show(g_screen);
             p_player.set_clips();
         }

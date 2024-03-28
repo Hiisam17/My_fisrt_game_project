@@ -28,6 +28,7 @@ class PlayerObject : public base_object
     };
 
     bool LoadImage ( std::string path, SDL_Renderer* screen, bool flip_horizontal = false);
+    bool LoadImage_Attack (std::string path, SDL_Renderer* screen, bool flip_horizontal);
     void Show ( SDL_Renderer* des, SDL_RendererFlip flip = SDL_FLIP_NONE);
     void Show_Attack ( SDL_Renderer* des, SDL_RendererFlip flip = SDL_FLIP_NONE);
     void HandleInputAction (SDL_Event events, SDL_Renderer* screen);
