@@ -21,7 +21,7 @@ class ThreatsObject : public base_object
 
     void set_clips();
     void SetMapXY (const int &map_x, const int &map_y) {map_x_ = map_x; map_y_ = map_y;}
-    void LoadImage (std::string path, SDL_Renderer* screen);
+    bool LoadImage (std::string path, SDL_Renderer* screen, bool flip = false);
     void Show(SDL_Renderer* des);
 
     int get_width_frame() const {return width_frame_;}

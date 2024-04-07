@@ -2,6 +2,7 @@
 #include "base_object.h"
 #include "game_map.h"
 #include "player_object.h"
+#include "threats.h"
 
 base_object g_background;
 
@@ -77,6 +78,26 @@ void close()
     SDL_Quit();
 }
 
+std::vector<ThreatsObject*> MakeThreatsList()
+{
+    std::vector<ThreatsObject*> list_threats;
+    ThreatsObject* threats_object = new ThreatsObject[20];
+    for (int i = 0; i < 20; i++)
+    {
+        ThreatsObject* p_threats = (threats_object + i);
+        if (p_threats != NULL)
+        {
+            p_threats->LoadImage("img//threat_.png", g_screen, true);
+            p_threats->set_clips();
+            p_threats->set_x_pos(500 + i * 500);
+            p_threats->set_y_pos(250);
+
+            list_threats.push_back(p_threats);
+        }
+    }
+    return list_threats;
+}
+
 int main(int argc, char* argv[])
 {
     // Kiểm tra việc khởi tạo dữ liệu
@@ -98,6 +119,8 @@ int main(int argc, char* argv[])
     PlayerObject p_player;
     p_player.LoadImage("img//stand_right.jpg", g_screen, false);
     //p_player.set_clips();
+
+    std::vector<ThreatsObject*> threats_list = MakeThreatsList();
 
     bool is_quit = false;
     // Vòng lặp chính của chương trình
@@ -139,6 +162,17 @@ int main(int argc, char* argv[])
         
         game_map.SetMap(map_data);
         game_map.DrawMap(g_screen);
+
+        for (int i = 0; i < threats_list.size(); i++)
+        {
+            ThreatsObject* p_threats = threats_list.at(i);
+            if (p_threats != NULL)
+            {
+                p_threats->SetMapXY(map_data.start_x_, map_data.start_y_);
+                p_threats->DoPlayer(map_data);
+                p_threats->Show(g_screen);
+            }
+        }
 
         if (p_player.is_game_over(map_data) == true)
         {
