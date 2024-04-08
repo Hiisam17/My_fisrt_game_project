@@ -3,6 +3,7 @@
 #include "game_map.h"
 #include "player_object.h"
 #include "threats.h"
+#include "check_attack.h"
 
 base_object g_background;
 
@@ -171,6 +172,7 @@ int main(int argc, char* argv[])
                 p_threats->SetMapXY(map_data.start_x_, map_data.start_y_);
                 p_threats->DoPlayer(map_data);
                 p_threats->Show(g_screen);
+                CheckAttack(p_player, threats_list);
             }
         }
 

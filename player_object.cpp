@@ -2,6 +2,7 @@
 #include "base_object.h"
 #include "player_object.h"
 #include <algorithm>
+#include "threats.h"
 
 
 PlayerObject::PlayerObject()
@@ -408,7 +409,6 @@ void PlayerObject::check_action_player (Map& map_data)
         map_data.tile[y1][x1 - 1] = 0;
     }
 
-
     x_pos_ += x_val_;
     y_pos_ += y_val_;
 
@@ -421,4 +421,7 @@ void PlayerObject::check_action_player (Map& map_data)
         x_pos_ = map_data.max_x_ - width_frame_ - 1;
     }
 }
+
+
+
 
