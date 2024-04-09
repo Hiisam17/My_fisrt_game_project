@@ -3,10 +3,12 @@
 #include "player_object.h"
 #include "threats.h"
 
+
+
 bool CheckCollision(const SDL_Rect& object1, const SDL_Rect& object2)
 {
-    int left_a = object1.x;
-    int right_a = object1.x + object1.w;
+    int left_a = object1.x + 15;
+    int right_a = object1.x + object1.w - 15;
     int top_a = object1.y;
     int bottom_a = object1.y + object1.h;
 
@@ -33,6 +35,15 @@ void CheckAttack(PlayerObject& player, std::vector<ThreatsObject*>& threats_list
             if (player.get_attack() == true)
             {
                 threats_list.erase(threats_list.begin() + i);
+            }
+            else
+            {
+                player.get_injured();
+                player.set_hp(player.get_hp() - 1);
+                if (player.get_hp() <= 0)
+                {
+                    player.set_dead(true);
+                }
             }
         }
     }

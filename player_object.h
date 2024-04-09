@@ -7,11 +7,12 @@
 
 #define GRAVITY_SPEED 0.8
 #define MAX_FALL_SPEED 10
-#define PLAYER_SPEED 40
+#define PLAYER_SPEED 10
 #define JUMP_SPEED 20
 #define CURRENT_HEIGHT 6
 #define GOAL_POINT 5
 #define MONEY_COIN 4
+#define INJURED 1
 
 class PlayerObject : public base_object
 {
@@ -40,13 +41,18 @@ class PlayerObject : public base_object
     void SetMapXY(const int map_x, const int map_y) {map_x_ = map_x; map_y_ = map_y;}
     void lock_map_to_character(Map& map_data);
 
-    bool is_game_over(Map& map_data);
+    bool is_game_over(Map& map_data, PlayerObject& player);
 
     int get_status() {return status_;}
 
     SDL_Rect get_player_box(SDL_Rect player_box) {player_box.x = int (x_pos_); player_box.y = int (y_pos_); player_box.w = width_frame_; player_box.h = height_frame_; return player_box;}
 
     bool get_attack() {return status_ == ATTACK_;}
+    bool get_injured() {return true;}
+    void set_hp(const int& hp) {hp_ = hp;}
+    int get_hp() {return hp_;}
+    void set_dead(const bool& dead) {dead_ = dead;}
+    bool get_dead() {return dead_;}
 
     private:
 
@@ -68,6 +74,8 @@ class PlayerObject : public base_object
     int map_x_;
     int map_y_;
 
+    int hp_;
+    bool dead_;
 
 };
 

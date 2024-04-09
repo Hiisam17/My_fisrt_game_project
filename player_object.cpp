@@ -24,6 +24,8 @@ PlayerObject::PlayerObject()
     on_ground = false;
     map_x_ = 0;
     map_y_ = 0;
+    hp_ = 3;
+    dead_ = false;
 }
 
 PlayerObject::~PlayerObject()

@@ -3,8 +3,10 @@
 #include "game_map.h"
 #include "player_object.h"
 #include "game_over.h"
+#include "threats.h"
+#include "check_attack.h"
 
-bool PlayerObject::is_game_over(Map& map_data)
+bool PlayerObject::is_game_over(Map& map_data, PlayerObject& player)
 {
     bool ret = false;
 
@@ -32,6 +34,12 @@ bool PlayerObject::is_game_over(Map& map_data)
     {
         ret = true;
     }
+
+    if (player.get_dead() == true)
+    {
+        ret = true;
+    }
+
     return ret;
 }
 

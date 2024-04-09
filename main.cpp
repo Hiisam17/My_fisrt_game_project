@@ -90,7 +90,7 @@ std::vector<ThreatsObject*> MakeThreatsList()
         {
             p_threats->LoadImage("img//threat_.png", g_screen, true);
             p_threats->set_clips();
-            p_threats->set_x_pos(500 + i * 500);
+            p_threats->set_x_pos(500 + i * 1200);
             p_threats->set_y_pos(250);
 
             list_threats.push_back(p_threats);
@@ -176,7 +176,7 @@ int main(int argc, char* argv[])
             }
         }
 
-        if (p_player.is_game_over(map_data) == true)
+        if (p_player.is_game_over(map_data, p_player) == true)
         {
             break;
         }
