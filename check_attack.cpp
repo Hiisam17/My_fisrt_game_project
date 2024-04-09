@@ -3,22 +3,6 @@
 #include "player_object.h"
 #include "threats.h"
 
-void CheckAttack(PlayerObject& player, std::vector<ThreatsObject*>& threats_list)
-{
-    SDL_Rect player_rect = player.get_player_box(player_rect);
-    for (int i = 0; i < threats_list.size(); i++)
-    {
-        SDL_Rect threats_rect = threats_list.at(i)->get_threats_box(threats_rect);
-        if (CheckCollision(player_rect, threats_rect))
-        {
-            if (player.get_attack() == true)
-            {
-                threats_list.erase(threats_list.begin() + i);
-            }
-        }
-    }
-}
-
 bool CheckCollision(const SDL_Rect& object1, const SDL_Rect& object2)
 {
     int left_a = object1.x;
@@ -37,3 +21,20 @@ bool CheckCollision(const SDL_Rect& object1, const SDL_Rect& object2)
     }
     return true;
 }
+
+void CheckAttack(PlayerObject& player, std::vector<ThreatsObject*>& threats_list)
+{
+    SDL_Rect player_rect = player.get_player_box(player_rect);
+    for (int i = 0; i < threats_list.size(); i++)
+    {
+        SDL_Rect threats_rect = threats_list.at(i)->get_threats_box(threats_rect);
+        if (CheckCollision(player_rect, threats_rect))
+        {
+            if (player.get_attack() == true)
+            {
+                threats_list.erase(threats_list.begin() + i);
+            }
+        }
+    }
+}
+

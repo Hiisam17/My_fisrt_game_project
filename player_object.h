@@ -44,7 +44,7 @@ class PlayerObject : public base_object
 
     int get_status() {return status_;}
 
-    SDL_Rect get_player_box(SDL_Rect player_box) {player_box.x = x_pos_; player_box.y = y_pos_; player_box.w = width_frame_; player_box.h = height_frame_; return player_box;}
+    SDL_Rect get_player_box(SDL_Rect player_box) {player_box.x = int (x_pos_); player_box.y = int (y_pos_); player_box.w = width_frame_; player_box.h = height_frame_; return player_box;}
 
     bool get_attack() {return status_ == ATTACK_;}
 
@@ -68,7 +68,6 @@ class PlayerObject : public base_object
     int map_x_;
     int map_y_;
 
-    SDL_Rect playerBox = {x_pos_, y_pos_, width_frame_, height_frame_};
 
 };
 

@@ -30,7 +30,7 @@ class ThreatsObject : public base_object
     void DoPlayer(Map& g_map);
     void CheckToMap(Map& g_map);
 
-    SDL_Rect get_threats_box(SDL_Rect threats_box) {threats_box.x = x_pos_; threats_box.y = y_pos_; threats_box.w = width_frame_; threats_box.h = height_frame_; return threats_box;}
+    SDL_Rect get_threats_box(SDL_Rect threats_box) {threats_box.x = int (x_pos_); threats_box.y = int (y_pos_); threats_box.w = width_frame_; threats_box.h = height_frame_; return threats_box;}
 
     private:
 
