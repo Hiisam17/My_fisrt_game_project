@@ -4,7 +4,7 @@
 
 #define THREAT_GRAVITY_SPEED 0.8
 #define THREAT_MAX_FALL_SPEED 10
-#define THREAT_SPEED 3
+#define THREAT_SPEED 5
 
 ThreatsObject::ThreatsObject()
 {
@@ -19,6 +19,11 @@ ThreatsObject::ThreatsObject()
     on_ground = false;
     map_x_ = 0;
     map_y_ = 0;
+
+    animation_a_ = 0;
+    animation_b_ = 0;
+    input_type_.left_ = 1;
+    type_move_ = STATIC_THREATS;
 }
 
 ThreatsObject::~ThreatsObject()
@@ -111,6 +116,15 @@ void ThreatsObject::DoPlayer(Map& g_map)
             y_val_ = THREAT_MAX_FALL_SPEED;
         }
 
+        if (input_type_.left_ == 1)
+        {
+            x_val_ -= THREAT_SPEED;
+        }
+        else if (input_type_.right_ == 1)
+        {
+            x_val_ += THREAT_SPEED;
+        }
+
         CheckToMap(g_map);
     }
     else if (comeback_time_ > 0)
@@ -123,6 +137,8 @@ void ThreatsObject::DoPlayer(Map& g_map)
             if (x_pos_ > 256)
             {
                 x_pos_ -= 256;
+                animation_a_ -= 256;
+                animation_b_ -= 256;
             }
             else
             {
@@ -213,5 +229,42 @@ void ThreatsObject::CheckToMap(Map& g_map)
     else if (x_pos_ + width_frame_ > g_map.max_x_)
     {
         x_pos_ = g_map.max_x_ - width_frame_ - 1;
+    }
+}
+
+void ThreatsObject::ImpMoveType (SDL_Renderer* screen)
+{
+    if (type_move_ == STATIC_THREATS)
+    {
+        ;
+    }
+    else if (type_move_ == MOVE_IN_SPACE_THREATS)
+    {
+        if (on_ground == true)
+        {
+            if (x_pos_ > animation_b_)
+            {
+                input_type_.left_ = 1;
+                input_type_.right_ = 0;
+                LoadImage("img//threat_left.png", screen, false);
+            }
+            else if (x_pos_ < animation_a_)
+            {
+                input_type_.left_ = 0;
+                input_type_.right_ = 1;
+                LoadImage("img//threat_right.png", screen, false);
+            }   
+        }
+        else
+        {
+            if (input_type_.left_ == 1)
+            {
+                LoadImage("img//threat_left.png", screen, false);
+            }
+            else
+            {
+                LoadImage("img//threat_right.png", screen, false);
+            }
+        }
     }
 }

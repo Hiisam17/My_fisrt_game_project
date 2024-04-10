@@ -7,6 +7,13 @@
 class ThreatsObject : public base_object
 {
     public:
+
+    enum MOVE_TYPE
+    {
+        STATIC_THREATS = 0,
+        MOVE_IN_SPACE_THREATS = 1,
+    };
+
     ThreatsObject();
     ~ThreatsObject();
 
@@ -32,6 +39,11 @@ class ThreatsObject : public base_object
 
     SDL_Rect get_threats_box(SDL_Rect threats_box) {threats_box.x = int (x_pos_); threats_box.y = int (y_pos_); threats_box.w = width_frame_; threats_box.h = height_frame_; return threats_box;}
 
+    void set_type_move(const int& type_move) {type_move_ = type_move;};
+    void set_animation_pos(const int& pos_a, const int& pos_b) {animation_a_ = pos_a; animation_b_ = pos_b;};
+    void set_input_left(const int& ip_left) {input_type_.left_ = ip_left;};
+    void ImpMoveType(SDL_Renderer* screen);
+
     private:
 
     float x_val_;
@@ -50,6 +62,11 @@ class ThreatsObject : public base_object
 
     int map_x_;
     int map_y_;
+
+    int type_move_;
+    int animation_a_;
+    int animation_b_;
+    Input input_type_;
 
 };
 
