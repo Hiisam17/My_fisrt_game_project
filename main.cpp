@@ -122,6 +122,8 @@ std::vector<ThreatsObject*> MakeThreatsList()
     return list_threats;
 }
 
+
+
 int main(int argc, char* argv[])
 {
     // Kiểm tra việc khởi tạo dữ liệu
@@ -145,6 +147,8 @@ int main(int argc, char* argv[])
     //p_player.set_clips();
 
     std::vector<ThreatsObject*> threats_list = MakeThreatsList();
+
+    ExplosionObject exp_object;
 
     bool is_quit = false;
     // Vòng lặp chính của chương trình
@@ -196,7 +200,7 @@ int main(int argc, char* argv[])
                 p_threats->ImpMoveType(g_screen);
                 p_threats->DoPlayer(map_data);
                 p_threats->Show(g_screen);
-                CheckAttack(p_player, threats_list);
+                CheckAttack(p_player, threats_list, exp_object);
             }
         }
 

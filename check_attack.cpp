@@ -2,6 +2,8 @@
 #include "base_object.h"
 #include "player_object.h"
 #include "threats.h"
+#include "check_attack.h"
+#include "explosion_.h"
 
 
 
@@ -24,7 +26,7 @@ bool CheckCollision(const SDL_Rect& object1, const SDL_Rect& object2)
     return true;
 }
 
-void CheckAttack(PlayerObject& player, std::vector<ThreatsObject*>& threats_list)
+void CheckAttack(PlayerObject& player, std::vector<ThreatsObject*>& threats_list, ExplosionObject& exp_object)
 {
     SDL_Rect player_rect = player.get_player_box(player_rect);
     for (int i = 0; i < threats_list.size(); i++)
@@ -34,6 +36,17 @@ void CheckAttack(PlayerObject& player, std::vector<ThreatsObject*>& threats_list
         {
             if (player.get_attack() == true)
             {
+                bool tRet = exp_object.LoadImage("img//boom_.png", g_screen);
+                if (tRet)
+                {
+                    exp_object.set_clip();
+                    exp_object.set_frame(0);
+                    exp_object.set_is_explosion(true);
+                    exp_object.set_frame_width(threats_rect.w);
+                    exp_object.set_frame_height(threats_rect.h);
+                    exp_object.set_x_pos(threats_rect.x);
+                    exp_object.set_y_pos(threats_rect.y);
+                }
                 threats_list.erase(threats_list.begin() + i);
             }
             else
