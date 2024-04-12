@@ -15,9 +15,9 @@ ExplosionObject::~ExplosionObject()
     ;
 }
 
-bool ExplosionObject::LoadImage(std::string path, SDL_Renderer* screen)
+bool ExplosionObject::LoadImage(std::string path, SDL_Renderer* screen, bool flip_horizontal /* false */)
 {
-    bool ret = base_object::LoadImage(path, screen);
+    bool ret = base_object::LoadImage(path, screen, flip_horizontal);
     if (ret == true)
     {
         frame_width_ = rect_.w / 8;
@@ -74,6 +74,8 @@ void ExplosionObject::set_clip()
 
 void ExplosionObject::Show(SDL_Renderer* des)
 {
+    LoadImage("img//BOOM_.png", des, false);
+    frame_++;
     if (frame_ >= 8)
     {
         frame_ = 0;

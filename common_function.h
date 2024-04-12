@@ -10,6 +10,7 @@
 #include <cmath>
 #include <algorithm>
 #include <vector>
+#include <iostream>
 
 
 static SDL_Window* g_window = NULL;
