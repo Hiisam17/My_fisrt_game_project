@@ -4,6 +4,8 @@
 #include "common_function.h"
 #include <vector>
 #include "base_object.h"
+#include "Slash_skill.h"
+
 
 #define GRAVITY_SPEED 0.8
 #define MAX_FALL_SPEED 10
@@ -26,6 +28,7 @@ class PlayerObject : public base_object
         MOVE_LEFT_ = 1,
         JUMP_UP_ = 2,
         ATTACK_ = 3,
+        SPECIAL_ATTACK_ = 4,
     };
 
     bool LoadImage ( std::string path, SDL_Renderer* screen, bool flip_horizontal = false);
@@ -54,6 +57,8 @@ class PlayerObject : public base_object
     void set_dead(const bool& dead) {dead_ = dead;}
     bool get_dead() {return dead_;}
 
+    std::vector<SlashSkill*> get_skill_list() const {return skill_list_;}
+
     private:
 
     float x_val_;
@@ -76,6 +81,8 @@ class PlayerObject : public base_object
 
     int hp_;
     bool dead_;
+
+    std::vector<SlashSkill*> skill_list_;
 
 };
 

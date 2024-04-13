@@ -26,7 +26,7 @@ bool CheckCollision(const SDL_Rect& object1, const SDL_Rect& object2)
     return true;
 }
 
-bool CheckAttack(PlayerObject& player, std::vector<ThreatsObject*>& threats_list, ExplosionObject& exp_object)
+bool CheckAttack(PlayerObject& player, std::vector<ThreatsObject*>& threats_list)
 {
     SDL_Rect player_rect = player.get_player_box(player_rect);
     bool check_injured = false;
@@ -38,25 +38,7 @@ bool CheckAttack(PlayerObject& player, std::vector<ThreatsObject*>& threats_list
             if (player.get_attack() == true)
             {
                 check_injured = false;
-                bool tRet = exp_object.LoadImage("img//BOOM_.png", g_screen, false);
                 threats_list.erase(threats_list.begin() + i);
-                if (!tRet) 
-                {
-                std::cerr << "Failed to load image img//boom_.png\n";
-                }
-
-                if (tRet)
-                {
-                    std::cout << "Explosion loaded\n";
-                    //exp_object.set_frame(0);
-                    exp_object.set_is_explosion(true);
-                    exp_object.set_frame_width(threats_rect.w);
-                    exp_object.set_frame_height(threats_rect.h);
-                    exp_object.set_x_pos(threats_rect.x);
-                    exp_object.set_y_pos(threats_rect.y);
-                    exp_object.Show(g_screen);
-                    exp_object.set_clip();
-                }
             }
             else
             {

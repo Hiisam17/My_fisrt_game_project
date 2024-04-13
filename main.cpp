@@ -148,10 +148,6 @@ int main(int argc, char* argv[])
 
     std::vector<ThreatsObject*> threats_list = MakeThreatsList();
 
-    ExplosionObject exp_object;
-    exp_object.LoadImage("img//BOOM_.png", g_screen, false);
-    exp_object.set_clip();
-
     int num_die = 0;
     int hp_ = 3;
 
@@ -205,7 +201,7 @@ int main(int argc, char* argv[])
                 p_threats->ImpMoveType(g_screen);
                 p_threats->DoPlayer(map_data);
                 p_threats->Show(g_screen);
-               life_check = CheckAttack(p_player, threats_list, exp_object);
+               life_check = CheckAttack(p_player, threats_list);
             }
         }
 
@@ -213,7 +209,7 @@ int main(int argc, char* argv[])
         {
             num_die++;
             std::cout << num_die << std::endl;
-            if (num_die == 10)
+            if (num_die == 30)
             {
                 hp_--;
                 num_die = 0;
