@@ -3,8 +3,6 @@
 #include "player_object.h"
 #include "threats.h"
 #include "check_attack.h"
-#include "explosion_.h"
-
 
 
 bool CheckCollision(const SDL_Rect& object1, const SDL_Rect& object2)
@@ -23,6 +21,7 @@ bool CheckCollision(const SDL_Rect& object1, const SDL_Rect& object2)
     {
         return false;
     }
+
     return true;
 }
 

@@ -29,10 +29,13 @@ PlayerObject::PlayerObject()
     map_y_ = 0;
     hp_ = 3;
     dead_ = false;
-    temp_x_left = std::round(x_pos_);
-    temp_y_left = std::round(y_pos_ + 0.4 * height_frame_);
+
+    temp_x_left = rect_.x - width_frame_ + 10;
+    temp_y_left = rect_.y - 0.1 *height_frame_;
     temp_x_right = rect_.x + width_frame_ - 10;
-    temp_y_right = rect_.y + 0.4 * height_frame_;
+    temp_y_right = rect_.y - 0.1 *height_frame_;   
+
+    end_skill = false;
 }
 
 PlayerObject::~PlayerObject()
@@ -134,12 +137,12 @@ void PlayerObject:: Show( SDL_Renderer* des, SDL_RendererFlip flip)
     }
     else if (input_type_.attack_ != 1)
     {
-        if (status_ == MOVE_RIGHT_) 
+        if (input_type_.stand_right_ == 1) 
         {
             LoadImage ("img//stand_right.jpg", des, false);
             frame_++;
         }
-        else if (status_ == MOVE_LEFT_)
+        else if (input_type_.stand_left_ == 1)
         {
             LoadImage ("img//stand_right.jpg", des, true);
             flip = SDL_FLIP_HORIZONTAL;
@@ -177,8 +180,32 @@ void PlayerObject::Show_Attack (SDL_Renderer* des, SDL_RendererFlip flip)
             flip = SDL_FLIP_HORIZONTAL;
             frame_++;
         }
-        /*LoadImage_Attack ("img//attack_right.png", des, true);
-        frame_++;*/
+        
+        if (status_ == SPECIAL_ATTACK_ && (input_type_.stand_left_ == 1 || input_type_.left_ == 1))
+        {
+            LoadImage_Attack ("img//attack_right.png", des, true);
+            flip = SDL_FLIP_HORIZONTAL;
+            frame_++;
+
+            if (end_skill == true)
+            {
+                LoadImage ("img//stand_right.jpg", des, true);
+                frame_++;
+            }
+
+        }
+        else if (status_ == SPECIAL_ATTACK_ && (input_type_.stand_right_ == 1 || input_type_.right_ == 1))
+        {
+            LoadImage_Attack ("img//attack_right.png", des, false);
+            frame_++;
+
+            if (end_skill == true)
+            {
+                LoadImage ("img//stand_right.jpg", des, false);
+                frame_++;
+            }
+        }
+
     }
 
     if (frame_ >= 8)
@@ -239,16 +266,26 @@ void PlayerObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
             break;
             case SDLK_x:
             {
+                input_type_.attack_ = 1;
+                status_ = SPECIAL_ATTACK_;
+                end_skill = false;
+
                 slash_skill_object* p_skill_ = new slash_skill_object();
+                temp_x_left = rect_.x - width_frame_ + 10;
+                temp_y_left = rect_.y - 0.1 *height_frame_;
+                temp_x_right = rect_.x + width_frame_ - 10;
+                temp_y_right = rect_.y - 0.1 *height_frame_;                                             
                 if (p_skill_ != nullptr) {
-                    p_skill_->LoadImage("img//Slash_skill.png", screen, false);
-                    if (status_ == MOVE_LEFT_)
+
+                    if (status_ == SPECIAL_ATTACK_ && (input_type_.stand_left_ == 1 || input_type_.left_ == 1))
                     {
+                        p_skill_->LoadImage("img//Slash_skill_left.png", screen, false);
                         p_skill_ -> set_skill_dir(slash_skill_object::LEFT_DIR);
                         p_skill_->set_rect(this->temp_x_left, temp_y_left);
                     }
-                    else if (status_ == MOVE_RIGHT_)
+                    else if (status_ == SPECIAL_ATTACK_ && (input_type_.stand_right_ == 1 || input_type_.right_ == 1))
                     {
+                        p_skill_->LoadImage("img//Slash_skill_right.png", screen, false);
                         p_skill_ -> set_skill_dir(slash_skill_object::RIGHT_DIR);
                         p_skill_->set_rect(this->temp_x_right, temp_y_right);
                     }
@@ -256,6 +293,7 @@ void PlayerObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
                     p_skill_->set_is_move(true);
 
                     skill_list_.push_back(p_skill_);
+
                 } else {
                 // Xử lý trường hợp không thể cấp phát bộ nhớ cho p_bullet_
                 }
@@ -272,14 +310,14 @@ void PlayerObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
         {
             case SDLK_RIGHT:
             {
-                input_type_.right_ = 0;
-                //status_ = 0;
+                input_type_.right_= 0;
+                input_type_.stand_right_ = 1;
             }
             break;
             case SDLK_LEFT:
             {
                 input_type_.left_ = 0;
-                //status_ = 0;
+                input_type_.stand_left_ = 1;
             }
             break;
             case SDLK_SPACE:
@@ -300,12 +338,19 @@ void PlayerObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
             case SDLK_x:
             {
                 input_type_.attack_ = 0;
+                end_skill = true;
+
                 if (status_ == SPECIAL_ATTACK_)
                 {
-                    status_ = MOVE_RIGHT_;
+                    if (input_type_.left_ || input_type_.stand_left_)
+                    {
+                        status_ = MOVE_LEFT_;
+                    }
+                    else if (input_type_.right_ || input_type_.stand_right_)
+                    {
+                        status_ = MOVE_RIGHT_;
+                    }
                 }
-
-
             }
             break;
             default:
@@ -317,24 +362,21 @@ void PlayerObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
 void PlayerObject::HandleSkill(SDL_Renderer* des)
 {
     std::vector<slash_skill_object*> p_skill_list_ = get_skill_list();
-    for (int i = 0; i < p_skill_list_.size(); i++)
+    for (int i = p_skill_list_.size() - 1; i >= 0; i--)
     {
         slash_skill_object* p_skill = p_skill_list_.at(i);
         if (p_skill != NULL)
         {
             if (p_skill->get_is_move() == true)
             {
-                p_skill->slash_skill_handle_move(SCREEN_WIDTH, SCREEN_HEIGHT);
+                p_skill->slash_skill_handle_move(x_pos_ + 500, SCREEN_HEIGHT);
                 p_skill->Render(des);
             }
             else
             {
                 p_skill_list_.erase(p_skill_list_.begin() + i);
-                if (p_skill != NULL)
-                {
-                    delete p_skill;
-                    p_skill = NULL;
-                }
+                //delete p_skill;
+                //p_skill = NULL;
             }
         }
     }

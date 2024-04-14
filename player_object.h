@@ -93,6 +93,8 @@ class PlayerObject : public base_object
 
     std::vector<slash_skill_object*> skill_list_;
 
+    bool end_skill;
+
 };
 
 

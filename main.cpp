@@ -171,23 +171,24 @@ int main(int argc, char* argv[])
 
         Map map_data = game_map.get_game_map();
 
-        p_player.HandleSkill(g_screen);
         p_player.action_player(map_data);
         p_player.SetMapXY(map_data.start_x_, map_data.start_y_);
 
         int player_status = p_player.get_status();
-        if (player_status == 3)
+        if (player_status == 3 || player_status == 4)
         {
             p_player.Show_Attack(g_screen);
             p_player.set_clips();
         }
-        if (player_status != 3)
+        if (player_status != 3 && player_status != 4)
         {
 
             p_player.Show(g_screen);
             p_player.set_clips();
         }
         
+        p_player.HandleSkill(g_screen);
+
         game_map.SetMap(map_data);
         game_map.DrawMap(g_screen);
 
@@ -223,7 +224,7 @@ int main(int argc, char* argv[])
 
         SDL_RenderPresent(g_screen);
 
-        SDL_Delay(30);
+        SDL_Delay(40);
     }
 
     close();
