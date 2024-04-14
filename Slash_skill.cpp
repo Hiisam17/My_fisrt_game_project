@@ -10,6 +10,11 @@ slash_skill_object::slash_skill_object()
     y_val_ = 0;
     is_move_ = false;
     skill_dir = 0;
+
+    x_pos_ = 0;
+    y_pos_ = 0;
+    width_frame_ = 0;
+    height_frame_ = 0;
 }
 
 
@@ -31,7 +36,7 @@ void slash_skill_object::slash_skill_handle_move(const int& x_limit_screen, cons
     else if (skill_dir == LEFT_DIR)
     {
         rect_.x -= x_val_;
-        if (rect_.x > x_limit_screen)
+        if (rect_.x < -x_limit_screen)
         {
             is_move_ = false;
         }

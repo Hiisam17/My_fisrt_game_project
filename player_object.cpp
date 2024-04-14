@@ -223,6 +223,20 @@ void PlayerObject::Show_Attack (SDL_Renderer* des, SDL_RendererFlip flip)
     SDL_RenderCopyEx (des, p_object_, current_clip, &renderQuad, 0, NULL, flip);
 }
 
+void PlayerObject::RemoveSkill(const int& skill_num, std::vector<slash_skill_object*>& skill_list_)
+{
+    if (skill_list_.size() > 0 && skill_num < skill_list_.size())
+    {
+        slash_skill_object* p_skill = skill_list_.at(skill_num);
+        skill_list_.erase(skill_list_.begin() + skill_num);
+
+        if (p_skill)
+        {
+            delete p_skill;
+            p_skill = NULL;
+        }
+    }
+}
 
 void PlayerObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
 {
@@ -286,7 +300,7 @@ void PlayerObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
                     else if (status_ == SPECIAL_ATTACK_ && (input_type_.stand_right_ == 1 || input_type_.right_ == 1))
                     {
                         p_skill_->LoadImage("img//Slash_skill_right.png", screen, false);
-                        p_skill_ -> set_skill_dir(slash_skill_object::RIGHT_DIR);
+                        p_skill_ ->set_skill_dir(slash_skill_object::RIGHT_DIR);
                         p_skill_->set_rect(this->temp_x_right, temp_y_right);
                     }
                     p_skill_->set_x_val(20);
@@ -369,14 +383,14 @@ void PlayerObject::HandleSkill(SDL_Renderer* des)
         {
             if (p_skill->get_is_move() == true)
             {
-                p_skill->slash_skill_handle_move(x_pos_ + 500, SCREEN_HEIGHT);
+                p_skill->slash_skill_handle_move(SCREEN_WIDTH, SCREEN_HEIGHT);
                 p_skill->Render(des);
             }
             else
             {
                 p_skill_list_.erase(p_skill_list_.begin() + i);
                 //delete p_skill;
-                //p_skill = NULL;
+                p_skill = NULL;
             }
         }
     }

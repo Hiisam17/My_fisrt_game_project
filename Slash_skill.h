@@ -29,11 +29,25 @@ public:
 
     void set_skill_dir(const unsigned int& dir) {skill_dir = dir;}
     unsigned int get_skill_dir() {return skill_dir;}
+
+    SDL_Rect get_skill_box(SDL_Rect skill_box) {skill_box.x = x_pos_; skill_box.y = y_pos_; skill_box.w = width_frame_; skill_box.h = height_frame_; return skill_box;}
+
+    void set_x_pos(const int& xp) {x_pos_ = xp;}
+    void set_y_pos(const int& yp) {y_pos_ = yp;}
+    void set_width_frame(const int& width) {width_frame_ = width;}
+    void set_height_frame(const int& height) {height_frame_ = height;}
+
 private:
     int x_val_;
     int y_val_;
     bool is_move_;
     unsigned int skill_dir;
+    SDL_Rect skill_box;
+
+    int x_pos_;
+    int y_pos_;
+    int width_frame_;
+    int height_frame_;
 };
 
 #endif

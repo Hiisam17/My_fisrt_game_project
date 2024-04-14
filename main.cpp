@@ -207,6 +207,8 @@ int main(int argc, char* argv[])
             }
         }
 
+        Check_Special_Attack(p_player, threats_list);
+
         if (life_check == true)
         {
             num_die++;
@@ -224,7 +226,7 @@ int main(int argc, char* argv[])
 
         SDL_RenderPresent(g_screen);
 
-        SDL_Delay(40);
+        SDL_Delay(30);
     }
 
     close();

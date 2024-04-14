@@ -62,6 +62,7 @@ class PlayerObject : public base_object
     std::vector<slash_skill_object*> get_skill_list() const {return skill_list_;}
 
     void HandleSkill(SDL_Renderer* des);
+    void RemoveSkill(const int& skill_num, std::vector<slash_skill_object*> &skill_list);
 
     private:
 

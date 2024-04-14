@@ -3,12 +3,13 @@
 #include "player_object.h"
 #include "threats.h"
 #include "check_attack.h"
+#include "Slash_skill.h"
 
 
 bool CheckCollision(const SDL_Rect& object1, const SDL_Rect& object2)
 {
-    int left_a = object1.x + 15;
-    int right_a = object1.x + object1.w - 15;
+    int left_a = object1.x;
+    int right_a = object1.x + object1.w;
     int top_a = object1.y;
     int bottom_a = object1.y + object1.h;
 
@@ -48,4 +49,62 @@ bool CheckAttack(PlayerObject& player, std::vector<ThreatsObject*>& threats_list
 
     return check_injured;
 }
+
+bool CheckCollision_Special_Attack(const SDL_Rect& object1, const SDL_Rect& object2)
+{
+    int left_a = object1.x;
+    int right_a = object1.x + object1.w;
+    int top_a = object1.y;
+    int bottom_a = object1.y + object1.h;
+
+    int left_b = object2.x;
+    int right_b = object2.x + object2.w;
+    int top_b = object2.y;
+    int bottom_b = object2.y + object2.h;
+
+    if (left_a > right_b || right_a < left_b || top_a > bottom_b || bottom_a < top_b)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool Check_Special_Attack(PlayerObject& player, std::vector<ThreatsObject*>& threats_list)
+{
+    bool ret = false;
+
+    std::vector<slash_skill_object*> skill_list = player.get_skill_list();
+
+    for (int t = 0; t < skill_list.size(); ++t)
+    {
+        SDL_Rect skill_rect = skill_list.at(t)->GetRect();
+        for (int k = 0; k < threats_list.size(); ++k)
+        {
+            ThreatsObject* p_threats = threats_list.at(k);
+            SDL_Rect threats_rect;
+            threats_rect.x = p_threats->GetRect().x;
+            threats_rect.y = p_threats->GetRect().y;
+            threats_rect.w = p_threats->get_width_frame();
+            threats_rect.h = p_threats->get_height_frame();
+            
+            if (CheckCollision_Special_Attack(skill_rect, threats_rect))
+            {
+                std::cout << "va cham" << std::endl;
+                threats_list.erase(threats_list.begin() + k);
+                player.RemoveSkill(t, skill_list);
+                ret = true;
+            }
+            else
+            {
+                ret = false;
+            }
+        }
+    }
+
+    return ret;
+
+}
+
+
 
