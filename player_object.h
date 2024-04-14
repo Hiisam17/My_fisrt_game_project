@@ -57,7 +57,11 @@ class PlayerObject : public base_object
     void set_dead(const bool& dead) {dead_ = dead;}
     bool get_dead() {return dead_;}
 
-    std::vector<SlashSkill*> get_skill_list() const {return skill_list_;}
+    void set_skill_list(const std::vector<slash_skill_object*> skill_list) {skill_list_ = skill_list;}
+
+    std::vector<slash_skill_object*> get_skill_list() const {return skill_list_;}
+
+    void HandleSkill(SDL_Renderer* des);
 
     private:
 
@@ -66,6 +70,11 @@ class PlayerObject : public base_object
 
     float x_pos_;
     float y_pos_;
+
+    int temp_x_left;
+    int temp_y_left;
+    int temp_x_right;
+    int temp_y_right;
 
     int width_frame_;
     int height_frame_;
@@ -82,7 +91,7 @@ class PlayerObject : public base_object
     int hp_;
     bool dead_;
 
-    std::vector<SlashSkill*> skill_list_;
+    std::vector<slash_skill_object*> skill_list_;
 
 };
 

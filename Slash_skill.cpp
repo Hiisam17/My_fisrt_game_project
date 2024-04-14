@@ -2,60 +2,39 @@
 #include "base_object.h"
 #include "Slash_skill.h"
 
-SlashSkill::SlashSkill()
+
+
+slash_skill_object::slash_skill_object()
 {
     x_val_ = 0;
     y_val_ = 0;
-    x_pos_ = 0;
-    y_pos_ = 0;
-    frame_width_ = 0;
-    frame_height_ = 0;
-    is_explosion_ = false;
+    is_move_ = false;
+    skill_dir = 0;
 }
 
-SlashSkill::~SlashSkill()
+
+slash_skill_object::~slash_skill_object()
 {
+
 }
 
-void SlashSkill::set_clip()
+void slash_skill_object::slash_skill_handle_move(const int& x_limit_screen, const int& y_limit_screen)
 {
-    frame_skill.x = 0;
-    frame_skill.y = 0;
-    frame_skill.w = frame_width_;
-    frame_skill.h = frame_height_;
-}
-
-bool SlashSkill::LoadImage(std::string path, SDL_Renderer* screen, bool flip_horizontal)
-{
-    bool ret = base_object::LoadImage(path, screen, flip_horizontal);
-    if (ret == true)
+    if (skill_dir == RIGHT_DIR)
     {
-        frame_width_ = rect_.w;
-        frame_height_ = rect_.h;
+        rect_.x += x_val_;
+        if (rect_.x > x_limit_screen)
+        {
+            is_move_ = false;
+        }
     }
-    return ret;
-}
-
-void SlashSkill::Skill_Move(const int& x_border, const int& y_border)
-{
-    x_pos_ += x_val_;
-    if (x_pos_ > x_border)
+    else if (skill_dir == LEFT_DIR)
     {
-        is_explosion_ = true;
+        rect_.x -= x_val_;
+        if (rect_.x > x_limit_screen)
+        {
+            is_move_ = false;
+        }
     }
+
 }
-
-void SlashSkill::Show(SDL_Renderer* des, SDL_RendererFlip flip)
-{
-    flip = SDL_FLIP_NONE;
-    LoadImage("img//Slash_skill.png", des, false);
-    rect_.x = x_pos_;
-    rect_.y = y_pos_;
-
-    SDL_Rect* current_clip = &frame_skill;
-
-    SDL_Rect renderQuad = {rect_.x, rect_.y, frame_width_, frame_height_};
-
-    SDL_RenderCopyEx (des, p_object_, current_clip, &renderQuad, 0, NULL, flip);
-}
-

@@ -5,6 +5,7 @@
 #include "threats.h"
 #include "Slash_skill.h"
 #include <vector>
+#include <cmath>
 
 
 PlayerObject::PlayerObject()
@@ -28,6 +29,10 @@ PlayerObject::PlayerObject()
     map_y_ = 0;
     hp_ = 3;
     dead_ = false;
+    temp_x_left = std::round(x_pos_);
+    temp_y_left = std::round(y_pos_ + 0.4 * height_frame_);
+    temp_x_right = rect_.x + width_frame_ - 10;
+    temp_y_right = rect_.y + 0.4 * height_frame_;
 }
 
 PlayerObject::~PlayerObject()
@@ -191,7 +196,8 @@ void PlayerObject::Show_Attack (SDL_Renderer* des, SDL_RendererFlip flip)
     SDL_RenderCopyEx (des, p_object_, current_clip, &renderQuad, 0, NULL, flip);
 }
 
-void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
+
+void PlayerObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
 {
     if (events.type == SDL_KEYDOWN)
     {
@@ -233,52 +239,25 @@ void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
             break;
             case SDLK_x:
             {
-                input_type_.attack_ = 1;
-                status_ = SPECIAL_ATTACK_;
-                std::vector<SlashSkill*> p_skill_list_ = get_skill_list();
-                SlashSkill* slash_skill = new SlashSkill();
-                if (!slash_skill) {
-                    std::cerr << "Failed to create SlashSkill object\n";
-                }
-                bool ret = slash_skill->LoadImage("img//Slash_skill.png", screen, false);
-                if (ret)
-                {
-                    slash_skill->set_frame_width(slash_skill->get_frame_width());
-                    slash_skill->set_frame_height(slash_skill->get_frame_height());
-                    slash_skill->set_x_val(15);
-                    slash_skill->set_y_val(0);
-                    slash_skill->set_is_explosion(false);
-                    slash_skill->set_x_pos(x_pos_ + 20);
-                    slash_skill->set_y_pos(y_pos_);
-                    slash_skill->set_frame_width(slash_skill->get_frame_width());
-                    slash_skill->set_frame_height(slash_skill->get_frame_height());
-                    slash_skill->Skill_Move(SCREEN_WIDTH, SCREEN_HEIGHT);
-                    p_skill_list_.push_back(slash_skill);
-                    for (int i = 0; i < p_skill_list_.size(); i++)
+                slash_skill_object* p_skill_ = new slash_skill_object();
+                if (p_skill_ != nullptr) {
+                    p_skill_->LoadImage("img//Slash_skill.png", screen, false);
+                    if (status_ == MOVE_LEFT_)
                     {
-                        SlashSkill* p_skill = p_skill_list_.at(i);
-                        if (p_skill)
-                        {
-                            if (p_skill->get_is_explosion() == false)
-                            {
-                                p_skill->set_clip();
-                                p_skill->Show(screen);
-                            }
-                            else
-                            {
-                                p_skill_list_.erase(p_skill_list_.begin() + i);
-                                if (p_skill != NULL)
-                                {
-                                    delete p_skill;
-                                    p_skill = NULL;
-                                }
-                            }
-                        }
+                        p_skill_ -> set_skill_dir(slash_skill_object::LEFT_DIR);
+                        p_skill_->set_rect(this->temp_x_left, temp_y_left);
                     }
-                }
-                else
-                {
-                    std::cerr << "Failed to load image img//Slash_skill.png\n";
+                    else if (status_ == MOVE_RIGHT_)
+                    {
+                        p_skill_ -> set_skill_dir(slash_skill_object::RIGHT_DIR);
+                        p_skill_->set_rect(this->temp_x_right, temp_y_right);
+                    }
+                    p_skill_->set_x_val(20);
+                    p_skill_->set_is_move(true);
+
+                    skill_list_.push_back(p_skill_);
+                } else {
+                // Xử lý trường hợp không thể cấp phát bộ nhớ cho p_bullet_
                 }
             }
             break;
@@ -335,7 +314,31 @@ void PlayerObject::HandleInputAction( SDL_Event events, SDL_Renderer* screen)
     }
 }
 
-
+void PlayerObject::HandleSkill(SDL_Renderer* des)
+{
+    std::vector<slash_skill_object*> p_skill_list_ = get_skill_list();
+    for (int i = 0; i < p_skill_list_.size(); i++)
+    {
+        slash_skill_object* p_skill = p_skill_list_.at(i);
+        if (p_skill != NULL)
+        {
+            if (p_skill->get_is_move() == true)
+            {
+                p_skill->slash_skill_handle_move(SCREEN_WIDTH, SCREEN_HEIGHT);
+                p_skill->Render(des);
+            }
+            else
+            {
+                p_skill_list_.erase(p_skill_list_.begin() + i);
+                if (p_skill != NULL)
+                {
+                    delete p_skill;
+                    p_skill = NULL;
+                }
+            }
+        }
+    }
+}
 
 void PlayerObject::action_player ( Map& map_data )
 {

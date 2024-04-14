@@ -171,6 +171,7 @@ int main(int argc, char* argv[])
 
         Map map_data = game_map.get_game_map();
 
+        p_player.HandleSkill(g_screen);
         p_player.action_player(map_data);
         p_player.SetMapXY(map_data.start_x_, map_data.start_y_);
 
