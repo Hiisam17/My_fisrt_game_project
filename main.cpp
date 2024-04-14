@@ -213,7 +213,7 @@ int main(int argc, char* argv[])
         {
             num_die++;
             std::cout << num_die << std::endl;
-            if (num_die == 30)
+            if (num_die == 10)
             {
                 hp_--;
                 num_die = 0;
@@ -222,6 +222,12 @@ int main(int argc, char* argv[])
             {
                 break;
             }
+        }
+
+        bool is_game_over = p_player.is_game_over(map_data, p_player);
+        if (is_game_over == true)
+        {
+            break;
         }
 
         SDL_RenderPresent(g_screen);

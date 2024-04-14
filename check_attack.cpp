@@ -78,7 +78,13 @@ bool Check_Special_Attack(PlayerObject& player, std::vector<ThreatsObject*>& thr
 
     for (int t = 0; t < skill_list.size(); ++t)
     {
-        SDL_Rect skill_rect = skill_list.at(t)->GetRect();
+        slash_skill_object* p_skill = skill_list.at(t);
+        SDL_Rect skill_rect;
+        skill_rect.x = p_skill->GetRect().x;
+        skill_rect.y = p_skill->GetRect().y;
+        skill_rect.w = p_skill->get_width_frame();
+        skill_rect.h = p_skill->get_height_frame();
+        
         for (int k = 0; k < threats_list.size(); ++k)
         {
             ThreatsObject* p_threats = threats_list.at(k);

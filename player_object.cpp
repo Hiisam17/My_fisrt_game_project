@@ -36,6 +36,8 @@ PlayerObject::PlayerObject()
     temp_y_right = rect_.y - 0.1 *height_frame_;   
 
     end_skill = false;
+
+    money_count = 0;
 }
 
 PlayerObject::~PlayerObject()
@@ -229,10 +231,10 @@ void PlayerObject::RemoveSkill(const int& skill_num, std::vector<slash_skill_obj
     {
         slash_skill_object* p_skill = skill_list_.at(skill_num);
         skill_list_.erase(skill_list_.begin() + skill_num);
+        set_skill_list(skill_list_);
 
         if (p_skill)
         {
-            delete p_skill;
             p_skill = NULL;
         }
     }
@@ -280,36 +282,45 @@ void PlayerObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
             break;
             case SDLK_x:
             {
-                input_type_.attack_ = 1;
-                status_ = SPECIAL_ATTACK_;
-                end_skill = false;
+                if (money_count >= 2)
+                {
+                    input_type_.attack_ = 1;
+                    status_ = SPECIAL_ATTACK_;
+                    end_skill = false;
+                    money_count -= 2;
 
-                slash_skill_object* p_skill_ = new slash_skill_object();
-                temp_x_left = rect_.x - width_frame_ + 10;
-                temp_y_left = rect_.y - 0.1 *height_frame_;
-                temp_x_right = rect_.x + width_frame_ - 10;
-                temp_y_right = rect_.y - 0.1 *height_frame_;                                             
-                if (p_skill_ != nullptr) {
+                    slash_skill_object* p_skill_ = new slash_skill_object();
+                    temp_x_left = rect_.x - width_frame_ + 10;
+                    temp_y_left = rect_.y - 0.1 *height_frame_;
+                    temp_x_right = rect_.x + width_frame_ - 10;
+                    temp_y_right = rect_.y - 0.1 *height_frame_;                                             
+                    if (p_skill_ != nullptr) {
 
-                    if (status_ == SPECIAL_ATTACK_ && (input_type_.stand_left_ == 1 || input_type_.left_ == 1))
-                    {
-                        p_skill_->LoadImage("img//Slash_skill_left.png", screen, false);
-                        p_skill_ -> set_skill_dir(slash_skill_object::LEFT_DIR);
-                        p_skill_->set_rect(this->temp_x_left, temp_y_left);
+                        if (status_ == SPECIAL_ATTACK_ && (input_type_.stand_left_ == 1 || input_type_.left_ == 1))
+                        {
+                            p_skill_->LoadImage("img//Slash_skill_left.png", screen, false);
+                            p_skill_ -> set_skill_dir(slash_skill_object::LEFT_DIR);
+                            p_skill_->set_rect(this->temp_x_left, temp_y_left);
+                        }
+                        else if (status_ == SPECIAL_ATTACK_ && (input_type_.stand_right_ == 1 || input_type_.right_ == 1))
+                        {
+                            p_skill_->LoadImage("img//Slash_skill_right.png", screen, false);
+                            p_skill_ ->set_skill_dir(slash_skill_object::RIGHT_DIR);
+                            p_skill_->set_rect(this->temp_x_right, temp_y_right);
+                        }
+                        p_skill_->set_x_val(20);
+                        p_skill_->set_is_move(true);
+
+                        skill_list_.push_back(p_skill_);
+
+                        std::cout << money_count << std::endl;
+
                     }
-                    else if (status_ == SPECIAL_ATTACK_ && (input_type_.stand_right_ == 1 || input_type_.right_ == 1))
-                    {
-                        p_skill_->LoadImage("img//Slash_skill_right.png", screen, false);
-                        p_skill_ ->set_skill_dir(slash_skill_object::RIGHT_DIR);
-                        p_skill_->set_rect(this->temp_x_right, temp_y_right);
-                    }
-                    p_skill_->set_x_val(20);
-                    p_skill_->set_is_move(true);
-
-                    skill_list_.push_back(p_skill_);
-
-                } else {
-                // Xử lý trường hợp không thể cấp phát bộ nhớ cho p_bullet_
+                }
+                else
+                {
+                    input_type_.attack_ = 0;
+                    break;
                 }
             }
             break;
@@ -373,10 +384,20 @@ void PlayerObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
     }
 }
 
+void PlayerObject::set_skill_list(const std::vector<slash_skill_object*> &skill_list)
+{
+    for (slash_skill_object* skill : skill_list_) {
+        delete skill;
+    }
+    skill_list_.clear();
+
+    skill_list_ = skill_list;
+}
+
 void PlayerObject::HandleSkill(SDL_Renderer* des)
 {
     std::vector<slash_skill_object*> p_skill_list_ = get_skill_list();
-    for (int i = p_skill_list_.size() - 1; i >= 0; i--)
+    /*for (int i = 0; i < p_skill_list_.size(); i++)
     {
         slash_skill_object* p_skill = p_skill_list_.at(i);
         if (p_skill != NULL)
@@ -389,11 +410,30 @@ void PlayerObject::HandleSkill(SDL_Renderer* des)
             else
             {
                 p_skill_list_.erase(p_skill_list_.begin() + i);
-                //delete p_skill;
+                delete p_skill;
                 p_skill = NULL;
             }
         }
+    }*/
+
+    for (int i = p_skill_list_.size() - 1; i >= 0; --i)
+{
+    slash_skill_object* p_skill = p_skill_list_.at(i);
+    if (p_skill != NULL)
+    {
+        if (p_skill->get_is_move() == true)
+        {
+            p_skill->slash_skill_handle_move(SCREEN_WIDTH, SCREEN_HEIGHT);
+            p_skill->Render(des);
+        }
+        else
+        {
+            p_skill_list_.erase(p_skill_list_.begin() + i);
+            p_skill = NULL;
+            set_skill_list(p_skill_list_);
+        }
     }
+}
 }
 
 void PlayerObject::action_player ( Map& map_data )
@@ -475,6 +515,16 @@ void PlayerObject::check_action_player (Map& map_data)
     {
         if (x_val_ > 0) // go right
         {
+            int val1 = map_data.tile[y1][x2];
+            int val2 = map_data.tile[y2][x2];
+
+            if (val1 == MONEY_COIN || val2 == MONEY_COIN)
+            {
+                map_data.tile[y1][x2] = 0;
+                map_data.tile[y2][x2] = 0;
+                earn_money();
+            }
+
             if (map_data.tile[y1][x2] != BLANK_TILE || map_data.tile[y2][x2] != BLANK_TILE)
             {
                 x_pos_ = x2 * TILE_SIZE;
@@ -484,6 +534,15 @@ void PlayerObject::check_action_player (Map& map_data)
         }
         else if (x_val_ < 0)
         {
+            int val1 = map_data.tile[y1][x1];
+            int val2 = map_data.tile[y2][x1];
+            if (val1 == MONEY_COIN || val2 == MONEY_COIN)
+            {
+                map_data.tile[y1][x1] = 0;
+                map_data.tile[y2][x1] = 0;
+                earn_money();
+            }
+
             if (map_data.tile[y1][x1] != BLANK_TILE || map_data.tile[y2][x1] != BLANK_TILE)
             {
                 x_pos_ = (x1 + 1) * TILE_SIZE;
@@ -503,6 +562,16 @@ void PlayerObject::check_action_player (Map& map_data)
     {
         if (y_val_ > 0) // go down
         {
+            int val1 = map_data.tile[y2][x1];
+            int val2 = map_data.tile[y2][x2];
+
+            if (val1 == MONEY_COIN || val2 == MONEY_COIN)
+            {
+                map_data.tile[y2][x1] = 0;
+                map_data.tile[y2][x2] = 0;
+                earn_money();
+            }
+
             if (map_data.tile[y2][x1] != BLANK_TILE || map_data.tile[y2][x2] != BLANK_TILE)
             {
                 y_pos_ = y2 * TILE_SIZE;
@@ -513,6 +582,15 @@ void PlayerObject::check_action_player (Map& map_data)
         }
         else if (y_val_ < 0)
         {
+            int val1 = map_data.tile[y1][x1];
+            int val2 = map_data.tile[y1][x2];
+            if (val1 == MONEY_COIN || val2 == MONEY_COIN)
+            {
+                map_data.tile[y1][x1] = 0;
+                map_data.tile[y1][x2] = 0;
+                earn_money();
+            }
+
             if (map_data.tile[y1][x1] != BLANK_TILE || map_data.tile[y1][x2] != BLANK_TILE)
             {
                 y_pos_ = y1 * TILE_SIZE;
@@ -521,19 +599,6 @@ void PlayerObject::check_action_player (Map& map_data)
                 on_ground = false;
             }
         }
-    }
-
-    if (map_data.tile[y1][x2] == MONEY_COIN || map_data.tile[y2][x2] == MONEY_COIN ||
-        map_data.tile[y2][x1] == MONEY_COIN || map_data.tile[y1][x2] == MONEY_COIN ||
-        map_data.tile[y1][x2 + 1] == MONEY_COIN || map_data.tile[y2][x2 + 1] == MONEY_COIN ||
-        map_data.tile[y1][x1 - 1] == MONEY_COIN || map_data.tile[y2][x1 - 1] == MONEY_COIN)
-    {
-        map_data.tile[y1][x2] = 0;
-        //map_data.tile[y2][x2] = 0;
-        map_data.tile[y1][x1] = 0;
-        //map_data.tile[y2][x1] = 0;
-        map_data.tile[y1][x2 + 1] = 0;
-        map_data.tile[y1][x1 - 1] = 0;
     }
 
     x_pos_ += x_val_;

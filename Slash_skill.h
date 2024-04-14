@@ -37,6 +37,9 @@ public:
     void set_width_frame(const int& width) {width_frame_ = width;}
     void set_height_frame(const int& height) {height_frame_ = height;}
 
+    int get_width_frame() {return width_frame_;}
+    int get_height_frame() {return height_frame_;}
+
 private:
     int x_val_;
     int y_val_;

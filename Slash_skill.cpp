@@ -13,8 +13,8 @@ slash_skill_object::slash_skill_object()
 
     x_pos_ = 0;
     y_pos_ = 0;
-    width_frame_ = 0;
-    height_frame_ = 0;
+    width_frame_ = 64;
+    height_frame_ = 64;
 }
 
 

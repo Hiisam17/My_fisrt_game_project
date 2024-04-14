@@ -9,7 +9,7 @@
 
 #define GRAVITY_SPEED 0.8
 #define MAX_FALL_SPEED 10
-#define PLAYER_SPEED 10
+#define PLAYER_SPEED 30
 #define JUMP_SPEED 20
 #define CURRENT_HEIGHT 6
 #define GOAL_POINT 5
@@ -57,12 +57,14 @@ class PlayerObject : public base_object
     void set_dead(const bool& dead) {dead_ = dead;}
     bool get_dead() {return dead_;}
 
-    void set_skill_list(const std::vector<slash_skill_object*> skill_list) {skill_list_ = skill_list;}
+    void set_skill_list(const std::vector<slash_skill_object*> &skill_list);
 
     std::vector<slash_skill_object*> get_skill_list() const {return skill_list_;}
 
     void HandleSkill(SDL_Renderer* des);
     void RemoveSkill(const int& skill_num, std::vector<slash_skill_object*> &skill_list);
+
+    void earn_money() {money_count ++;}
 
     private:
 
@@ -95,6 +97,8 @@ class PlayerObject : public base_object
     std::vector<slash_skill_object*> skill_list_;
 
     bool end_skill;
+
+    int money_count;
 
 };
 
