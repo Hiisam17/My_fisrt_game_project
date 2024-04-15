@@ -20,7 +20,7 @@ slash_skill_object::slash_skill_object()
 
 slash_skill_object::~slash_skill_object()
 {
-
+Free();
 }
 
 void slash_skill_object::slash_skill_handle_move(const int& x_limit_screen, const int& y_limit_screen)
@@ -31,6 +31,7 @@ void slash_skill_object::slash_skill_handle_move(const int& x_limit_screen, cons
         if (rect_.x > x_limit_screen)
         {
             is_move_ = false;
+            delete this;
         }
     }
     else if (skill_dir == LEFT_DIR)
@@ -39,6 +40,7 @@ void slash_skill_object::slash_skill_handle_move(const int& x_limit_screen, cons
         if (rect_.x < -x_limit_screen)
         {
             is_move_ = false;
+            delete this;
         }
     }
 

@@ -9,6 +9,26 @@
 bool CheckCollision(const SDL_Rect& object1, const SDL_Rect& object2)
 {
     int left_a = object1.x;
+    int right_a = object1.x + object1.w - 30;
+    int top_a = object1.y;
+    int bottom_a = object1.y + object1.h;
+
+    int left_b = object2.x;
+    int right_b = object2.x + object2.w - 10;
+    int top_b = object2.y;
+    int bottom_b = object2.y + object2.h;
+
+    if (left_a > right_b || right_a < left_b || top_a > bottom_b || bottom_a < top_b)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool CheckCollision_Attack(const SDL_Rect& object1, const SDL_Rect& object2)
+{
+    int left_a = object1.x -32;
     int right_a = object1.x + object1.w;
     int top_a = object1.y;
     int bottom_a = object1.y + object1.h;
@@ -24,25 +44,41 @@ bool CheckCollision(const SDL_Rect& object1, const SDL_Rect& object2)
     }
 
     return true;
+
 }
 
 bool CheckAttack(PlayerObject& player, std::vector<ThreatsObject*>& threats_list)
 {
-    SDL_Rect player_rect = player.get_player_box(player_rect);
+    SDL_Rect player_rect;
+    player_rect.x = player.GetRect().x;
+    player_rect.y = player.GetRect().y;
+    player_rect.w = player.get_width_frame();
+    player_rect.h = player.get_height_frame();
+
     bool check_injured = false;
     for (int i = 0; i < threats_list.size(); i++)
     {
-        SDL_Rect threats_rect = threats_list.at(i)->get_threats_box(threats_rect);
+        ThreatsObject* p_threats = threats_list.at(i);
+        SDL_Rect threats_rect;
+        threats_rect.x = p_threats->GetRect().x;
+        threats_rect.y = p_threats->GetRect().y;
+        threats_rect.w = p_threats->get_width_frame();
+        threats_rect.h = p_threats->get_height_frame();
+
         if (CheckCollision(player_rect, threats_rect))
+        {
+            if (player.get_attack() == false)
+            {
+                check_injured = true;
+            }
+        }
+
+        if (CheckCollision_Attack(player_rect, threats_rect))
         {
             if (player.get_attack() == true)
             {
-                check_injured = false;
                 threats_list.erase(threats_list.begin() + i);
-            }
-            else
-            {
-                check_injured = true;
+                check_injured = false;
             }
         }
     }

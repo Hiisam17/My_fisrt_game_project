@@ -175,12 +175,12 @@ int main(int argc, char* argv[])
         p_player.SetMapXY(map_data.start_x_, map_data.start_y_);
 
         int player_status = p_player.get_status();
-        if (player_status == 3 || player_status == 4)
+        if (player_status == PlayerObject::ATTACK_ || player_status == PlayerObject::SPECIAL_ATTACK_)
         {
             p_player.Show_Attack(g_screen);
             p_player.set_clips();
         }
-        if (player_status != 3 && player_status != 4)
+        else if (player_status != PlayerObject::ATTACK_  || player_status != PlayerObject::SPECIAL_ATTACK_)
         {
 
             p_player.Show(g_screen);
@@ -211,17 +211,7 @@ int main(int argc, char* argv[])
 
         if (life_check == true)
         {
-            num_die++;
-            std::cout << num_die << std::endl;
-            if (num_die == 10)
-            {
-                hp_--;
-                num_die = 0;
-            }
-            if (hp_ <= 0)
-            {
-                break;
-            }
+            break;
         }
 
         bool is_game_over = p_player.is_game_over(map_data, p_player);

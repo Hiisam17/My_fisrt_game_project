@@ -35,11 +35,6 @@ bool PlayerObject::is_game_over(Map& map_data, PlayerObject& player)
         ret = true;
     }
 
-    if (player.get_dead() == true)
-    {
-        ret = true;
-    }
-
     return ret;
 }
 

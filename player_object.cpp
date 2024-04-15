@@ -27,8 +27,6 @@ PlayerObject::PlayerObject()
     on_ground = false;
     map_x_ = 0;
     map_y_ = 0;
-    hp_ = 3;
-    dead_ = false;
 
     temp_x_left = rect_.x - width_frame_ + 10;
     temp_y_left = rect_.y - 0.1 *height_frame_;
@@ -64,7 +62,7 @@ bool PlayerObject::LoadImage_Attack (std::string path, SDL_Renderer* screen, boo
 
     if (ret == true)
     {
-        width_frame_ = rect_.w / 8 + 1;
+        width_frame_ = (rect_.w + 1) / 8;
         height_frame_ = rect_.h;
     }
 
@@ -397,7 +395,7 @@ void PlayerObject::set_skill_list(const std::vector<slash_skill_object*> &skill_
 void PlayerObject::HandleSkill(SDL_Renderer* des)
 {
     std::vector<slash_skill_object*> p_skill_list_ = get_skill_list();
-    /*for (int i = 0; i < p_skill_list_.size(); i++)
+    for (int i = 0; i < p_skill_list_.size(); i++)
     {
         slash_skill_object* p_skill = p_skill_list_.at(i);
         if (p_skill != NULL)
@@ -410,30 +408,11 @@ void PlayerObject::HandleSkill(SDL_Renderer* des)
             else
             {
                 p_skill_list_.erase(p_skill_list_.begin() + i);
-                delete p_skill;
                 p_skill = NULL;
             }
         }
-    }*/
-
-    for (int i = p_skill_list_.size() - 1; i >= 0; --i)
-{
-    slash_skill_object* p_skill = p_skill_list_.at(i);
-    if (p_skill != NULL)
-    {
-        if (p_skill->get_is_move() == true)
-        {
-            p_skill->slash_skill_handle_move(SCREEN_WIDTH, SCREEN_HEIGHT);
-            p_skill->Render(des);
-        }
-        else
-        {
-            p_skill_list_.erase(p_skill_list_.begin() + i);
-            p_skill = NULL;
-            set_skill_list(p_skill_list_);
-        }
     }
-}
+
 }
 
 void PlayerObject::action_player ( Map& map_data )
