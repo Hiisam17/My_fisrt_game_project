@@ -77,6 +77,7 @@ bool CheckAttack(PlayerObject& player, std::vector<ThreatsObject*>& threats_list
         {
             if (player.get_attack() == true)
             {
+                player.set_mark(1);
                 threats_list.erase(threats_list.begin() + i);
                 check_injured = false;
             }
@@ -133,6 +134,7 @@ bool Check_Special_Attack(PlayerObject& player, std::vector<ThreatsObject*>& thr
             if (CheckCollision_Special_Attack(skill_rect, threats_rect))
             {
                 std::cout << "va cham" << std::endl;
+                player.set_mark(1);
                 threats_list.erase(threats_list.begin() + k);
                 player.RemoveSkill(t, skill_list);
                 ret = true;

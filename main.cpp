@@ -5,6 +5,7 @@
 #include "threats.h"
 #include "check_attack.h"
 #include "text_object.h"
+#include "menu.h"
 
 base_object g_background;
 TTF_Font* font_time = NULL;
@@ -125,7 +126,7 @@ std::vector<ThreatsObject*> MakeThreatsList()
         {
             p_threats->LoadImage("img//threat_.png", g_screen, true);
             p_threats->set_clips();
-            p_threats->set_x_pos(500 + i * 1200);
+            p_threats->set_x_pos(400 + i * 1200);
             p_threats->set_y_pos(250);
             p_threats->set_type_move(ThreatsObject::STATIC_THREATS);
             p_threats->set_input_left(0);
@@ -135,7 +136,6 @@ std::vector<ThreatsObject*> MakeThreatsList()
     }
     return list_threats;
 }
-
 
 
 int main(int argc, char* argv[])
@@ -165,7 +165,12 @@ int main(int argc, char* argv[])
     TextObject time_game;
     time_game.SetColor(TextObject::WHITE_TEXT);
 
+    TextObject mark_game;
+    mark_game.SetColor(TextObject::WHITE_TEXT);
+
     bool is_quit = false;
+
+    showMenu(g_screen);
 
     while (!is_quit) {
 
@@ -252,6 +257,22 @@ int main(int argc, char* argv[])
             time_game.SetText(str_time);
             time_game.LoadFromRenderText(font_time, g_screen);
             time_game.RenderText(g_screen, SCREEN_WIDTH - 200, 15);
+        }
+
+        std::string str_mark = "Mark: ";
+        int val_mark = p_player.get_mark();
+        if (val_mark < 0)
+        {
+            val_mark = 0;
+        }
+        else
+        {
+            str_mark += std::to_string(val_mark);
+
+            mark_game.SetText(str_mark);
+            mark_game.LoadFromRenderText(font_time, g_screen);
+            mark_game.RenderText(g_screen, SCREEN_WIDTH * 0.5, 15);
+
         }
 
         SDL_RenderPresent(g_screen);

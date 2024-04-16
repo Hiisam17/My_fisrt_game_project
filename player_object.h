@@ -65,6 +65,9 @@ class PlayerObject : public base_object
     int get_width_frame() {return width_frame_;}
     int get_height_frame() {return height_frame_;}
 
+    int get_mark() {return score_count;}
+    void set_mark(const int& mark) {score_count += mark;}
+
     private:
 
     float x_val_;
@@ -95,6 +98,8 @@ class PlayerObject : public base_object
     bool end_skill;
 
     int money_count;
+
+    int score_count;
 
 };
 
