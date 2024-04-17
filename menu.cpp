@@ -24,8 +24,11 @@ SDL_Texture* loadTexture(const std::string &file, SDL_Renderer* ren)
     return texture;
 }
 
-void showMenu(SDL_Renderer* renderer) {
+bool showMenu(SDL_Renderer* renderer) {
     // Load menu options
+
+    bool ret = false;
+
     SDL_Texture* g_menu[3];
     g_menu[0] = loadTexture("img//menu_play.jpg", renderer);
     g_menu[1] = loadTexture("img//menu_quit.jpg", renderer);
@@ -45,59 +48,79 @@ void showMenu(SDL_Renderer* renderer) {
     menuRects[1].h = 75;
 
     bool isRunning = true;
-    int menu_index;
-    int last_menu_index = 2;
+    int menu_index = -1;
     SDL_Event event;
+    int x, y;
+    x = 0;
+    y = 0;
 
     while (isRunning) {
-        // Clear the screen
-        SDL_RenderClear(renderer);
-
-        // Render the menu options
-        SDL_RenderCopy(renderer, g_menu[2], NULL, NULL);
-
-        // Update the screen
-        SDL_RenderPresent(renderer);
-
         // Handle events
         while (SDL_PollEvent(&event)) {
-
             if (event.type == SDL_QUIT) {
+                ret = true;
                 isRunning = false;
             }
             else if (event.type == SDL_MOUSEMOTION) {
-                int x, y;
                 SDL_GetMouseState(&x, &y);
 
-                menu_index = -1;
-
                 // Check if any menu option was clicked
+                menu_index = -1;
                 for (int i = 0; i < 2; i++) {
                     if (SDL_PointInRect(new SDL_Point{x, y}, &menuRects[i])) {
-                        // Handle the click on the menu option
                         menu_index = i;
                         break;
                     }
                 }
-                
-                if (menu_index != -1)
+            }
+            else if (event.type == SDL_MOUSEBUTTONDOWN)
+            {
+                if (menu_index == 0)
                 {
-                    SDL_RenderCopy(renderer, g_menu[menu_index], NULL, NULL);
-                    SDL_RenderPresent(renderer);
+                    ret = false;
+                    isRunning = false;
+                    for (int i = 0; i < 3; i++)
+                    {
+                        if (g_menu[i] != NULL)
+                        {
+                            SDL_DestroyTexture(g_menu[i]);
+                            g_menu[i] = NULL;
+                        }
+                    
+                    }
                 }
-                else
+                else if (menu_index == 1)
                 {
-                    SDL_RenderCopy(renderer, g_menu[2], NULL, NULL);
-                    SDL_RenderPresent(renderer);
+                    ret = true;
+                    isRunning = false;
+                    for (int i = 0; i < 3; i++)
+                    {
+                        if (g_menu[i] != NULL)
+                        {
+                            SDL_DestroyTexture(g_menu[i]);
+                            g_menu[i] = NULL;
+                        }
+                    }
                 }
             }
         }
+
+        // Clear the screen
+        SDL_RenderClear(renderer);
+
+        // Render the menu options
+        if (menu_index != -1 && menu_index != 2) {
+            SDL_RenderCopy(renderer, g_menu[menu_index], NULL, NULL);
+        }
+        else {
+            SDL_RenderCopy(renderer, g_menu[2], NULL, NULL);
+        }
+
+        // Update the screen
+        SDL_RenderPresent(renderer);
     }
 
-    // Clean up
-    for (int i = 0; i < 3; i++) {
-        SDL_DestroyTexture(g_menu[i]);
-    }
+    return ret;
 }
 
 bool CheckFocusWithRect(const int& x, const int& y, const SDL_Rect& rect) {

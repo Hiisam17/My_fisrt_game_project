@@ -170,7 +170,7 @@ int main(int argc, char* argv[])
 
     bool is_quit = false;
 
-    showMenu(g_screen);
+    is_quit = showMenu(g_screen);
 
     while (!is_quit) {
 
