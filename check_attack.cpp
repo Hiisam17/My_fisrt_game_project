@@ -47,7 +47,7 @@ bool CheckCollision_Attack(const SDL_Rect& object1, const SDL_Rect& object2)
 
 }
 
-bool CheckAttack(PlayerObject& player, std::vector<ThreatsObject*>& threats_list)
+bool CheckAttack(PlayerObject& player, std::vector<ThreatsObject*>& threats_list, Mix_Chunk* g_sound_hit)
 {
     SDL_Rect player_rect;
     player_rect.x = player.GetRect().x;
@@ -80,6 +80,7 @@ bool CheckAttack(PlayerObject& player, std::vector<ThreatsObject*>& threats_list
                 player.set_mark(1);
                 threats_list.erase(threats_list.begin() + i);
                 check_injured = false;
+                Mix_PlayChannel(-1, g_sound_hit, 0);
             }
         }
     }

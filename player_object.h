@@ -35,12 +35,12 @@ class PlayerObject : public base_object
     bool LoadImage_Attack (std::string path, SDL_Renderer* screen, bool flip_horizontal);
     void Show ( SDL_Renderer* des, SDL_RendererFlip flip = SDL_FLIP_NONE);
     void Show_Attack ( SDL_Renderer* des, SDL_RendererFlip flip = SDL_FLIP_NONE);
-    void HandleInputAction (SDL_Event events, SDL_Renderer* screen);
+    void HandleInputAction (SDL_Event events, SDL_Renderer* screen, Mix_Chunk* g_sound_sword[2]);
     void set_clips();
 
     void action_player( Map& map_data);
     float get_x_val_() {return x_val_;}
-    void check_action_player(Map& map_data);
+    void check_action_player(Map& map_data, Mix_Chunk* g_sound_coin);
     void SetMapXY(const int map_x, const int map_y) {map_x_ = map_x; map_y_ = map_y;}
     void lock_map_to_character(Map& map_data);
 
@@ -60,7 +60,8 @@ class PlayerObject : public base_object
     void HandleSkill(SDL_Renderer* des);
     void RemoveSkill(const int& skill_num, std::vector<slash_skill_object*> &skill_list);
 
-    void earn_money() {money_count ++;}
+    void earn_money(Mix_Chunk* g_sound_coin) {Mix_PlayChannel(-1, g_sound_coin, 0); money_count ++;}
+    int get_money() {return money_count;}
 
     int get_width_frame() {return width_frame_;}
     int get_height_frame() {return height_frame_;}

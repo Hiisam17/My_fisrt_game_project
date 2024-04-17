@@ -24,7 +24,7 @@ SDL_Texture* loadTexture(const std::string &file, SDL_Renderer* ren)
     return texture;
 }
 
-bool showMenu(SDL_Renderer* renderer) {
+bool showMenu(SDL_Renderer* renderer, Uint32& start_time_, Mix_Music* g_sound_menu) {
     // Load menu options
 
     bool ret = false;
@@ -54,7 +54,10 @@ bool showMenu(SDL_Renderer* renderer) {
     x = 0;
     y = 0;
 
+    Mix_PlayMusic(g_sound_menu, -1);
+
     while (isRunning) {
+
         // Handle events
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
@@ -62,6 +65,8 @@ bool showMenu(SDL_Renderer* renderer) {
                 isRunning = false;
             }
             else if (event.type == SDL_MOUSEMOTION) {
+
+
                 SDL_GetMouseState(&x, &y);
 
                 // Check if any menu option was clicked
@@ -88,6 +93,8 @@ bool showMenu(SDL_Renderer* renderer) {
                         }
                     
                     }
+
+                    Mix_HaltMusic();
                 }
                 else if (menu_index == 1)
                 {
@@ -115,6 +122,8 @@ bool showMenu(SDL_Renderer* renderer) {
         else {
             SDL_RenderCopy(renderer, g_menu[2], NULL, NULL);
         }
+
+        start_time_ = SDL_GetTicks() / 1000;
 
         // Update the screen
         SDL_RenderPresent(renderer);

@@ -28,6 +28,12 @@ const int COLOR_KEY_B = 180;
 
 const int RENDER_DRAW_COLOR = 255;
 
+static Mix_Chunk* g_sound_sword[2];
+static Mix_Chunk* g_sound_hit;
+static Mix_Chunk* g_sound_coin;
+static Mix_Music* g_sound_menu;
+static Mix_Music* g_sound_in_game;
+
 #define TILE_SIZE 64
 #define BLANK_TILE 0
 

@@ -238,7 +238,7 @@ void PlayerObject::RemoveSkill(const int& skill_num, std::vector<slash_skill_obj
     }
 }
 
-void PlayerObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
+void PlayerObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen, Mix_Chunk* g_sound_sword[2])
 {
     if (events.type == SDL_KEYDOWN)
     {
@@ -276,6 +276,8 @@ void PlayerObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
                 {
                     status_ = ATTACK_;
                 }
+
+                Mix_PlayChannel(-1, g_sound_sword[0], 0);
             }
             break;
             case SDLK_x:
@@ -312,6 +314,8 @@ void PlayerObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
                         skill_list_.push_back(p_skill_);
 
                         std::cout << money_count << std::endl;
+
+                        Mix_PlayChannel(-1, g_sound_sword[1], 0);
 
                     }
                 }
@@ -444,7 +448,7 @@ void PlayerObject::action_player ( Map& map_data )
         }
 
     }
-    check_action_player (map_data);
+    check_action_player (map_data, g_sound_coin);
     lock_map_to_character (map_data);
 }
 
@@ -473,7 +477,7 @@ void PlayerObject::lock_map_to_character(Map& map_data)
 }
 
 
-void PlayerObject::check_action_player (Map& map_data)
+void PlayerObject::check_action_player (Map& map_data, Mix_Chunk* g_sound_coin)
 {
     int x1 = 0;
     int x2 = 0;
@@ -501,7 +505,16 @@ void PlayerObject::check_action_player (Map& map_data)
             {
                 map_data.tile[y1][x2] = 0;
                 map_data.tile[y2][x2] = 0;
-                earn_money();
+                if (val1 == MONEY_COIN)
+                {
+                    earn_money(g_sound_coin);
+                    Mix_PlayChannel(-1, g_sound_coin, 0);
+                }
+                else if (val2 == MONEY_COIN)
+                {
+                    earn_money(g_sound_coin);
+                    Mix_PlayChannel(-1, g_sound_coin, 0);
+                }
             }
 
             if (map_data.tile[y1][x2] != BLANK_TILE || map_data.tile[y2][x2] != BLANK_TILE)
@@ -519,7 +532,16 @@ void PlayerObject::check_action_player (Map& map_data)
             {
                 map_data.tile[y1][x1] = 0;
                 map_data.tile[y2][x1] = 0;
-                earn_money();
+                if (val1 == MONEY_COIN)
+                {
+                    earn_money(g_sound_coin);
+                    Mix_PlayChannel(-1, g_sound_coin, 0);
+                }
+                else if (val2 == MONEY_COIN)
+                {
+                    earn_money(g_sound_coin);
+                    Mix_PlayChannel(-1, g_sound_coin, 0);
+                }
             }
 
             if (map_data.tile[y1][x1] != BLANK_TILE || map_data.tile[y2][x1] != BLANK_TILE)
@@ -548,7 +570,17 @@ void PlayerObject::check_action_player (Map& map_data)
             {
                 map_data.tile[y2][x1] = 0;
                 map_data.tile[y2][x2] = 0;
-                earn_money();
+                if (val1 == MONEY_COIN)
+                {
+                    earn_money(g_sound_coin);
+                    Mix_PlayChannel(-1, g_sound_coin, 0);
+                }
+                else if (val2 == MONEY_COIN)
+                {
+                    earn_money(g_sound_coin);
+                    Mix_PlayChannel(-1, g_sound_coin, 0);
+                }
+                
             }
 
             if (map_data.tile[y2][x1] != BLANK_TILE || map_data.tile[y2][x2] != BLANK_TILE)
@@ -567,7 +599,16 @@ void PlayerObject::check_action_player (Map& map_data)
             {
                 map_data.tile[y1][x1] = 0;
                 map_data.tile[y1][x2] = 0;
-                earn_money();
+                if (val1 == MONEY_COIN)
+                {
+                    earn_money(g_sound_coin);
+                    Mix_PlayChannel(-1, g_sound_coin, 0);
+                }
+                else if (val2 == MONEY_COIN)
+                {
+                    earn_money(g_sound_coin);
+                    Mix_PlayChannel(-1, g_sound_coin, 0);
+                }
             }
 
             if (map_data.tile[y1][x1] != BLANK_TILE || map_data.tile[y1][x2] != BLANK_TILE)

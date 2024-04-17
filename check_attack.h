@@ -6,7 +6,7 @@
 #include "threats.h"
 
 
-bool CheckAttack(PlayerObject& player, std::vector<ThreatsObject*>& threats_list);
+bool CheckAttack(PlayerObject& player, std::vector<ThreatsObject*>& threats_list, Mix_Chunk* g_sound_hit);
 bool CheckCollision(const SDL_Rect& object1, const SDL_Rect& object2);
 bool CheckCollision_Special_Attack(const SDL_Rect& object1, const SDL_Rect& object2);
 bool Check_Special_Attack(PlayerObject& player, std::vector<ThreatsObject*>& threats_list);

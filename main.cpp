@@ -6,9 +6,11 @@
 #include "check_attack.h"
 #include "text_object.h"
 #include "menu.h"
+#include "in_game.h"
 
 base_object g_background;
 TTF_Font* font_time = NULL;
+Uint32 start_time_ = 0;
 
 bool InitData() 
 {
@@ -60,6 +62,26 @@ bool InitData()
         font_time = TTF_OpenFont("font//dlxfont_.ttf", 20);
         if (font_time == NULL)
         {
+            success = false;
+        }
+
+        if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) == -1)
+        {
+            success = false;
+        }
+
+        g_sound_sword[0] = Mix_LoadWAV("mixer//normal_attack.wav");
+        g_sound_sword[1] = Mix_LoadWAV("mixer//special_attack.wav");
+        g_sound_hit = Mix_LoadWAV("mixer//hit_effect.wav");
+        g_sound_coin = Mix_LoadWAV("mixer//earn_coin.wav");
+        g_sound_menu = Mix_LoadMUS("mixer//game_menu.wav");
+        g_sound_in_game = Mix_LoadMUS("mixer//in_game.wav");
+
+        if(g_sound_sword[0] == NULL || g_sound_sword[1] == NULL || g_sound_hit == NULL ||
+           g_sound_coin == NULL || g_sound_menu == NULL || g_sound_in_game == NULL)
+        {
+            std::cout << "Failed to load sound effect!" << std::endl;
+            std::cout << Mix_GetError() << std::endl;
             success = false;
         }
         
@@ -160,6 +182,10 @@ int main(int argc, char* argv[])
     p_player.LoadImage("img//stand_right.jpg", g_screen, false);
     //p_player.set_clips();
 
+    PlayerMoney p_money;
+    p_money.InitMoney(g_screen);
+    p_money.SetPos(SCREEN_WIDTH - 1200, 5);
+
     std::vector<ThreatsObject*> threats_list = MakeThreatsList();
 
     TextObject time_game;
@@ -168,9 +194,14 @@ int main(int argc, char* argv[])
     TextObject mark_game;
     mark_game.SetColor(TextObject::WHITE_TEXT);
 
+    TextObject money_game;
+    money_game.SetColor(TextObject::WHITE_TEXT);
+
     bool is_quit = false;
 
-    is_quit = showMenu(g_screen);
+    is_quit = showMenu(g_screen, start_time_, g_sound_menu);
+
+    Mix_PlayMusic(g_sound_in_game, -1);
 
     while (!is_quit) {
 
@@ -180,7 +211,7 @@ int main(int argc, char* argv[])
                 is_quit = true;
             }
 
-            p_player.HandleInputAction (g_event, g_screen);
+            p_player.HandleInputAction (g_event, g_screen, g_sound_sword);
         }
 
         SDL_SetRenderDrawColor(g_screen, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR);
@@ -192,6 +223,16 @@ int main(int argc, char* argv[])
 
         p_player.action_player(map_data);
         p_player.SetMapXY(map_data.start_x_, map_data.start_y_);
+
+        GeometricFormat rect1(0, 0, SCREEN_WIDTH, 60);
+        ColorData color_data1(0, 80, 150);
+        Geometric::RenderRectangle(rect1, g_screen, color_data1);
+
+        GeometricFormat outline1(0, 0, SCREEN_WIDTH - 1, 58);
+        ColorData color_data2(255, 255, 255);
+        Geometric::RenderOutline(outline1, g_screen, color_data2);
+
+        p_money.Show(g_screen);
 
         int player_status = p_player.get_status();
         if (player_status == PlayerObject::ATTACK_ || player_status == PlayerObject::SPECIAL_ATTACK_)
@@ -222,7 +263,7 @@ int main(int argc, char* argv[])
                 p_threats->ImpMoveType(g_screen);
                 p_threats->DoPlayer(map_data);
                 p_threats->Show(g_screen);
-               life_check = CheckAttack(p_player, threats_list);
+               life_check = CheckAttack(p_player, threats_list, g_sound_hit);
             }
         }
 
@@ -243,7 +284,7 @@ int main(int argc, char* argv[])
 
         std::string str_time = "Time: ";
         Uint32 time_val = SDL_GetTicks() / 1000;
-        Uint32 val_time = 300 - time_val;
+        Uint32 val_time = 300 + start_time_ - time_val;
         if (val_time <= 0)
         {
             is_quit = true;
@@ -273,6 +314,21 @@ int main(int argc, char* argv[])
             mark_game.LoadFromRenderText(font_time, g_screen);
             mark_game.RenderText(g_screen, SCREEN_WIDTH * 0.5, 15);
 
+        }
+
+        std::string str_money = "Money: ";
+        int money_count = p_player.get_money();
+        if (money_count < 0)
+        {
+            money_count = 0;
+        }
+        else
+        {
+            str_money += std::to_string(money_count);
+
+            money_game.SetText(str_money);
+            money_game.LoadFromRenderText(font_time, g_screen);
+            money_game.RenderText(g_screen, SCREEN_WIDTH - 1120, 15);
         }
 
         SDL_RenderPresent(g_screen);
