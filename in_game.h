@@ -3,6 +3,10 @@
 
 #include "common_function.h"
 #include "base_object.h"
+#include "player_object.h"
+#include "threats.h"
+#include "check_attack.h"
+#include "menu.h"
 
 class PlayerMoney : public base_object
 {

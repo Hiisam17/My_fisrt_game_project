@@ -9,7 +9,7 @@
 
 #define GRAVITY_SPEED 0.8
 #define MAX_FALL_SPEED 10
-#define PLAYER_SPEED 20
+#define PLAYER_SPEED 10
 #define JUMP_SPEED 20
 #define CURRENT_HEIGHT 6
 #define GOAL_POINT 5
@@ -45,6 +45,8 @@ class PlayerObject : public base_object
     void lock_map_to_character(Map& map_data);
 
     bool is_game_over(Map& map_data, PlayerObject& player);
+
+    bool is_win(Map& map_data, PlayerObject& player);
 
     int get_status() {return status_;}
 

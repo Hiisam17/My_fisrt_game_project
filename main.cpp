@@ -126,10 +126,10 @@ std::vector<ThreatsObject*> MakeThreatsList()
         ThreatsObject* p_threats = (dynamic_threats + i);
         if (p_threats != NULL)
         {
-            p_threats->LoadImage("img//threat_left.png", g_screen, true);
+            p_threats->LoadImage("img//walk_left.jpg", g_screen, false);
             p_threats->set_clips();
             p_threats->set_type_move(ThreatsObject::MOVE_IN_SPACE_THREATS);
-            p_threats->set_x_pos(700 + i * 1500);
+            p_threats->set_x_pos(600 + i * 1500);
             p_threats->set_y_pos(250);
 
             int pos1 = p_threats->get_x_pos() - 60;
@@ -146,7 +146,7 @@ std::vector<ThreatsObject*> MakeThreatsList()
         ThreatsObject* p_threats = (threats_object + i);
         if (p_threats != NULL)
         {
-            p_threats->LoadImage("img//threat_.png", g_screen, true);
+            p_threats->LoadImage("img//idle_left.jpg", g_screen, true);
             p_threats->set_clips();
             p_threats->set_x_pos(400 + i * 1200);
             p_threats->set_y_pos(250);
@@ -202,6 +202,7 @@ int main(int argc, char* argv[])
     is_quit = showMenu(g_screen, start_time_, g_sound_menu);
 
     Mix_PlayMusic(g_sound_in_game, -1);
+    bool restart = false;
 
     while (!is_quit) {
 
@@ -209,6 +210,7 @@ int main(int argc, char* argv[])
             if (g_event.type == SDL_QUIT)
             {
                 is_quit = true;
+                restart = true;
             }
 
             p_player.HandleInputAction (g_event, g_screen, g_sound_sword);
@@ -267,11 +269,13 @@ int main(int argc, char* argv[])
             }
         }
 
+
         Check_Special_Attack(p_player, threats_list);
 
         if (life_check == true)
         {
             is_quit = true;
+            MessageBoxW(NULL, L"GAME OVER", L"THANKS FOR PLAYING", MB_OK | MB_ICONSTOP); 
             break;
         }
 
@@ -279,6 +283,15 @@ int main(int argc, char* argv[])
         if (is_game_over == true)
         {
             is_quit = true;
+            MessageBoxW(NULL, L"GAME OVER", L"THANKS FOR PLAYING", MB_OK | MB_ICONSTOP);
+            break;
+        }
+
+        bool is_win = p_player.is_win(map_data, p_player);
+        if (is_win == true)
+        {
+            is_quit = true;
+            MessageBoxW(NULL, L"CONGRATULATIONS", L"YOU WIN", MB_OK | MB_ICONSTOP);
             break;
         }
 
@@ -288,6 +301,7 @@ int main(int argc, char* argv[])
         if (val_time <= 0)
         {
             is_quit = true;
+            MessageBoxW(NULL, L"GAME OVER", L"THANKS FOR PLAYING", MB_OK | MB_ICONSTOP);
             break;
         }
         else

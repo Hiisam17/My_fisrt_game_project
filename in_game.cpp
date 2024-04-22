@@ -38,3 +38,5 @@ void Geometric::RenderOutline(const GeometricFormat& geo_size, SDL_Renderer* scr
     SDL_SetRenderDrawColor(screen, color_data.red_, color_data.green_, color_data.blue_, 0xFF);
     SDL_RenderDrawRect(screen, &outlineRect);
 }
+
+

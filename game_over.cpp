@@ -27,18 +27,34 @@ bool PlayerObject::is_game_over(Map& map_data, PlayerObject& player)
     {
         ret = true;
     }
-    else if (map_data.tile[y2][x1] == GOAL_POINT || 
-             map_data.tile[y2][x2] == GOAL_POINT ||
-             map_data.tile[y1][x1] == GOAL_POINT ||
-             map_data.tile[y1][x2] == GOAL_POINT)
+
+    return ret;
+}
+
+bool PlayerObject::is_win(Map& map_data, PlayerObject& player)
+{
+    bool ret = false;
+
+    int x1 = 0;
+    int x2 = 0;
+
+    int y1 = 0;
+    int y2 = 0;
+
+    int width_min = width_frame_ < TILE_SIZE ? width_frame_ : TILE_SIZE;
+    x1 = (x_pos_) / TILE_SIZE;
+    x2 = (x_pos_ + width_min - 6) / TILE_SIZE;
+
+    y1 = (y_pos_ + y_val_) / TILE_SIZE;
+    y2 = (y_pos_ + y_val_ + height_frame_ - 1) / TILE_SIZE;
+
+    if (map_data.tile[y2][x1] == GOAL_POINT || 
+        map_data.tile[y2][x2] == GOAL_POINT ||
+        map_data.tile[y1][x1] == GOAL_POINT ||
+        map_data.tile[y1][x2] == GOAL_POINT)
     {
         ret = true;
     }
 
     return ret;
-}
-
-void render_screen_game_over()
-{
-    
 }

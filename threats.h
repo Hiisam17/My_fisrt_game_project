@@ -42,7 +42,7 @@ class ThreatsObject : public base_object
     void set_type_move(const int& type_move) {type_move_ = type_move;};
     void set_animation_pos(const int& pos_a, const int& pos_b) {animation_a_ = pos_a; animation_b_ = pos_b;};
     void set_input_left(const int& ip_left) {input_type_.left_ = ip_left;};
-    void ImpMoveType(SDL_Renderer* screen);
+    void ImpMoveType(SDL_Renderer* screen, SDL_RendererFlip flip_ = SDL_FLIP_NONE);
 
     private:
 
@@ -67,6 +67,8 @@ class ThreatsObject : public base_object
     int animation_a_;
     int animation_b_;
     Input input_type_;
+
+    bool flip;
 
 };
 

@@ -24,11 +24,12 @@ ThreatsObject::ThreatsObject()
     animation_b_ = 0;
     input_type_.left_ = 1;
     type_move_ = STATIC_THREATS;
+    flip = false;
 }
 
 ThreatsObject::~ThreatsObject()
 {
-
+Free();
 }
 
 bool ThreatsObject::LoadImage(std::string path, SDL_Renderer* screen, bool flip)
@@ -101,7 +102,7 @@ void ThreatsObject::Show(SDL_Renderer* des)
         }
         SDL_Rect* current_clip = &frame_clip_[frame_];
         SDL_Rect renderQuad = {rect_.x, rect_.y, width_frame_, height_frame_};
-        SDL_RenderCopy(des, p_object_, current_clip, &renderQuad);
+        SDL_RenderCopyEx(des, p_object_, current_clip, &renderQuad, 0.0, NULL, flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
     }
 }
 
@@ -232,7 +233,7 @@ void ThreatsObject::CheckToMap(Map& g_map)
     }
 }
 
-void ThreatsObject::ImpMoveType (SDL_Renderer* screen)
+void ThreatsObject::ImpMoveType (SDL_Renderer* screen, SDL_RendererFlip flip_)
 {
     if (type_move_ == STATIC_THREATS)
     {
@@ -246,24 +247,32 @@ void ThreatsObject::ImpMoveType (SDL_Renderer* screen)
             {
                 input_type_.left_ = 1;
                 input_type_.right_ = 0;
-                LoadImage("img//threat_left.png", screen, false);
+                flip = false;
+                flip_ = SDL_FLIP_NONE;
+                LoadImage("img//walk_left.jpg", screen, false);
             }
             else if (x_pos_ < animation_a_)
             {
                 input_type_.left_ = 0;
                 input_type_.right_ = 1;
-                LoadImage("img//threat_right.png", screen, false);
+                flip_ = SDL_FLIP_HORIZONTAL;
+                flip = true;
+                LoadImage("img//walk_left.jpg", screen, true);
             }   
         }
         else
         {
             if (input_type_.left_ == 1)
             {
-                LoadImage("img//threat_left.png", screen, false);
+                flip_ = SDL_FLIP_NONE;
+                flip = false;
+                LoadImage("img//walk_left.jpg", screen, false);
             }
             else
             {
-                LoadImage("img//threat_right.png", screen, false);
+                flip_ = SDL_FLIP_HORIZONTAL;
+                flip = true;
+                LoadImage("img//walk_left.jpg", screen, true);
             }
         }
     }
