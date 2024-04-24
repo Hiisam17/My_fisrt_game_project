@@ -1,2 +1,5 @@
-# My_fisrt_game_project
-Game được làm dựa trên game CONTRA. Game có 1 số tính năng cơ bản như di chuyển tự do, sử dụng vũ khí để tiêu diệt kẻ địch.
+KNIGHT x MONSTERS
+Họ và tên: Lê Duy Khánh Toàn
+MSSV: 23020702
+Lớp: K68-CQ-J
+Mã học phần: INT2215 52
