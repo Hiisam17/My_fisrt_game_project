@@ -32,11 +32,28 @@ Cơ Chế Điều Khiển:
 - Sử dụng phím z để thực hiện tấn công thường.
 - Mỗi khi bạn kiếm được vàng, hãy tiêu 2 vàng để sử dụng nút x để phát động skill chém đặc biệt.
 - Khi bạn tiêu diệt hết quái vật và chạm được vào đích, bạn sẽ chiến thắng.
-- Hãy cẩn thận với lũ quái và vực sâu, bạn sẽ thua nếu dính phải chúng.
-Tải Ngay:
-[Bạn có thể cung cấp liên kết tải trực tiếp vào đây hoặc hướng dẫn người chơi tìm trò chơi trên cửa hàng ứng dụng phù hợp]
+- Hãy cẩn thận với lũ quái và vực sâu, bạn sẽ thua nếu đụng phải chúng.
+
+Tải Ngay: https://drive.google.com/file/d/1ADK86ugMjm-qEzaHPAi3g5OzYvAQ3WOZ/view?usp=sharing
 
 Hãy Sẵn Sàng Cho Thử Thách:
-[Tên Trò Chơi] không chỉ là một trò chơi giải trí, mà còn là một cuộc thách thức tuyệt vời cho trí óc của bạn. Hãy chuẩn bị để thử thách bản thân và khám phá những bí ẩn đầy kỳ diệu trong trò chơi này!
+KNIGHTS x MONSTERS không chỉ là một trò chơi giải trí, mà còn là một cuộc thách thức tuyệt vời cho trí óc của bạn. Hãy chuẩn bị để thử thách bản thân và khám phá những bí ẩn đầy kỳ diệu trong trò chơi này!
 
 Hãy Cùng Nhau Bắt Đầu Cuộc Phiêu Lưu!
+
+Source code tham khảo: https://drive.google.com/file/d/1NV7cdAL27kzAHJ3fIcrwgsgKOeTHsbYD/view
+
+Sơ bộ về các file trong source code:
+- common_function: Chứa các thư viện, các định nghĩa, các struct, class dùng xuyên suốt quá trình làm game.
+- base_object: chứa class base_object chứa các hàm, các biến cơ sở để build nhân vật cũng như kẻ địch.
+- game_map: Chức năng chính là đọc file chứa thông số map và vẽ map lên trên màn hình.
+- player_object: Chứa tất cả các thông số, quy định hành động của nhân vật.
+- slash_skill: chứa thông số về skill của nhân vật.
+- threats: chứa thông sô và hành động của đối tượng quái vật, bao gồm việc đứng yên và chuyển dộng.
+- game_over: chứa các hàm quy định thắng / thua của game.
+- text_object: có nhiệm vụ tạo text và vẽ text lên màn hình.
+- in_game: có nhiệm vụ vẽ các ảnh và các khối hình phụ lên màn hình.
+- menu: Tạo menu và render lên màn hình, cũng như các thao tác với menu game.
+- main: File chính, có chứa 1 vài hàm khởi tạo SDL cũng như hàm giải phóng, đồng thời vận hành tất cả các logic chính của game dựa trên các file khác.
+- Các file img, font, map, mixer chứa các thông tin về đồ họa, âm thanh, hình ảnh của game. 
+
