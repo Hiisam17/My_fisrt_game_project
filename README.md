@@ -21,9 +21,9 @@ __________________
 
 Mở file exe để chơi game
 Màn hình sẽ hiện ra
-![Màn hình bắt đầu](./image/menu.bmp)
+![Màn hình bắt đầu](./img/illus_menu.jpg)
 
-Click chuột vào ô ![Play game](./image1/play.png) để có thể bắt đầu vào chơi game hoặc click chuột vào ô ![Quit game] để thoát
+Click chuột vào ô [Play game] để có thể bắt đầu vào chơi game hoặc click chuột vào ô [Quit game] để thoát
 
 __________________
 ### 2 . Cách chơi
@@ -34,18 +34,21 @@ Cơ Chế Điều Khiển:
 - Sử dụng các phím mũi tên trái, phải để di chuyển.
 - Sử dụng phím cách để nhảy.
 - Sử dụng phím z để thực hiện tấn công thường.
+  ![NORMAL ATTACK](./img/illus_attack.jpg)
 - Mỗi khi bạn kiếm được vàng, hãy tiêu 2 vàng để sử dụng nút x để phát động skill chém đặc biệt.
+  ![SPECIAL ATTACK](./img/illus_slash.jpg)
 - Khi bạn tiêu diệt hết quái vật và chạm được vào đích, bạn sẽ chiến thắng.
 - Hãy cẩn thận với lũ quái và vực sâu, bạn sẽ thua nếu đụng phải chúng.
+  ![MOSNTERS](.img/illus_threat.jpg)
 
 __________
 
 ### 3 . Kết thúc
 >Người chơi dành chiến thắng khi chạm vạch đích
-![demo](./image1/win.png)
+![demo](./img/illus_win.jpg)
 
 >Người chơi thua cuộc khi rơi xuống vực thẳm hoặc chạm phải kẻ địch
-![demo1](./image1/lose.png)
+![demo1](./img/illus_game_over.jpg)
 
 >Sau khi hoàn thành trò chơi chương trình sẽ tự động đóng
 
