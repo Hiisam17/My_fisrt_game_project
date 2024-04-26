@@ -39,7 +39,7 @@ Cơ Chế Điều Khiển:
   ![SPECIAL ATTACK](./img/illus_slash.jpg)
 - Khi bạn tiêu diệt hết quái vật và chạm được vào đích, bạn sẽ chiến thắng.
 - Hãy cẩn thận với lũ quái và vực sâu, bạn sẽ thua nếu đụng phải chúng.
-  ![MOSNTERS](.img/illus_threat.jpg)
+  ![MOSNTERS](./img/illus_threat.jpg)
 
 __________
 
@@ -80,6 +80,7 @@ Các ảnh đều lấy từ hình ảnh trên [google](google.com) và công c�
 - Lỗi về quản lí dữ liệu game.
 - Game thi thoảng sẽ có hiện tượng giật lag.
 - Khi thoát chương trình sẽ bị delay một thời gian.
+- DI chuyển của quái chưa được xử lí nhiều.
 
 **Tải game**
 - Link GGDrive: https://drive.google.com/file/d/1ADK86ugMjm-qEzaHPAi3g5OzYvAQ3WOZ/view?usp=sharing
